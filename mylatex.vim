@@ -1,0 +1,38 @@
+" Ranger to Choose files for editing 
+fun! RangerChooser()
+silent !ranger --choosefile=/tmp/chosenfile 
+if filereadable('/tmp/chosenfile')
+  exec 'edit ' . system('cat /tmp/chosenfile')
+  call system('rm /tmp/chosenfile')
+endif
+redraw!
+endfun
+map ,r :call RangerChooser()<CR>
+
+" My Latex commands
+" Latex
+fun! LatexCompile()
+ silent !latex -interaction=nonstopmode %
+ redraw!
+endfun
+map ,l :call LatexCompile()<CR>
+"Dvips
+fun! DvipsCompile()
+ silent !dvips -o %:t:r.ps %:t:r.dvi
+ redraw!
+endfun
+map ,d :call DvipsCompile()<CR>
+"Ps2pdf
+fun! Ps2pdfCompile()
+ silent !ps2pdf %:t:r.ps
+ redraw!
+endfun
+map ,p :call Ps2pdfCompile()<CR>
+"Latex,Dvips,Ps2PDF
+fun! PsTricksCompile()
+ :call LatexCompile()
+ :call DvipsCompile()
+ :call Ps2pdfCompile()
+endfun
+map ,a :call PsTricksCompile()<CR>
+
