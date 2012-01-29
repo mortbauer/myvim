@@ -14,3 +14,4 @@ highlight BadWhitespace ctermbg=red guibg=red
 match BadWhitespace /^\t\+/
 " Make trailing whitespace be flagged as bad.
 match BadWhitespace /\s\+$/
+set encoding=utf-8

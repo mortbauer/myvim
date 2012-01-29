@@ -2,9 +2,11 @@
 " Copyright 2009-2011 Tom Vincent <http://www.tlvince.com/contact/>
 " vim: set fdm=marker:
 
+
 " Environment {{{1
 "
 " A consistent runtime environment.
+runtime! archlinux.vim
 
 " Forget about vi and set it first as it modifies future behaviour
 set nocompatible
@@ -16,6 +18,7 @@ set backupdir=$XDG_CACHE_HOME/vim,~/,/tmp
 set viminfo+=n$XDG_CACHE_HOME/vim/viminfo
 set runtimepath=$XDG_CONFIG_HOME/vim,$XDG_CONFIG_HOME/vim/after,$VIM,$VIMRUNTIME,/usr/share/vim/vimfiles/
 let $MYVIMRC="$XDG_CONFIG_HOME/vim/vimrc"
+set undodir=$XDG_CONFIG_HOME/vim/tmp
 
 " Load plugins managed by pathogen
 call pathogen#infect()
@@ -26,6 +29,10 @@ call pathogen#helptags()
 " General preferences {{{1
 "
 " Learn about these using vim help.
+set ttymouse=urxvt
+
+" Persistent undos
+set undofile
 
 " File based
 filetype plugin on      " Load file type plugins
@@ -39,7 +46,7 @@ set softtabstop=4       " Just to be clear
 set expandtab           " Insert tabs as spaces
 
 " Searching
-"set wrapscan            " Wrap searches
+set nowrapscan            " Wrap searches
 set ignorecase          " Ignore search term case...
 set smartcase           " ... unless term contains an uppercase character
 set incsearch           " Highlight search...
@@ -47,7 +54,7 @@ set showmatch           " ... results
 set hlsearch            " ... as you type
 
 " Wrapping
-set textwidth=70        " Hard-wrap text at nth column
+"set textwidth=70        " Hard-wrap text at nth column
 set wrap                " Wrap long lines
 
 " General
@@ -64,6 +71,10 @@ set undolevels=1000     " Increase number of possible undos.
 set wildmode=list:longest,full " Complete to longest  string (list:longest) and then complete all full matches after another (full). Thanks to pbrisbin (http://pbrisbin.com:8080/dotfiles/vimrc).
 set mouse=a
 set backspace=indent,eol,start          " Allow backspacing on the given values
+set ls=2
+set sw=2
+set iskeyword+=:
+set cursorline          " Heighlight the line the cursor is in
 
 " Visuals {{{1
 "
@@ -71,9 +82,9 @@ set backspace=indent,eol,start          " Allow backspacing on the given values
 
 if has('gui_running')
    if has('win32') || has('win64')
-       set guifont=DejaVu_Sans_Mono:h11,Consolas:h11,Courier_New:h11
+       set guifont=DejaVu_Sans_Mono:h8,Consolas:h8,Courier_New:h8
    else
-       set guifont=Monospace\ 11                " Fallback to system default
+       set guifont=Monospace\ 10                " Fallback to system default
    endif
    set guioptions-=T                       " Hide toolbar
    set guioptions-=m                       " Hide menu bar
@@ -86,18 +97,31 @@ else
    colorscheme zenburn
 endif
 
+" Statusline Format
+set statusline=%<%F%h%m%r%h%w%y\ %{strftime(\"%d/%m/%Y-%H:%M\")}%=\ col:%c%V\ pos:%o\ lin:%l\,%L\ %P
+
 " Mappings {{{1
 "
 " vim does funny things with inline comments here, so don't use them.
 
+" Insert newline without going into insert mode
+map <F8> o<Esc>
+map <F9> O<Esc>
+
 " Map leader (the dedicated user-mapping prefix key) to comma
 let mapleader = ","
+
+" Replace the word under the cursor ,
+nnoremap <Leader> :%s/\<<C-r><C-w>\>/
 
 " Leader + v to open vimrc in a new tab
 nmap <leader>v :tabedit $MYVIMRC<CR>
 
 " Leader + t to open a new tab
 nmap <leader>t :tabnew<CR>
+
+" M to show marks
+noremap M :marks
 
 " Open a file (relative to the current file)
 " See: http://vimcasts.org/episodes/the-edit-command/
@@ -131,8 +155,9 @@ nnoremap <leader><space> :nohlsearch<CR>
 
 " Sudo to write
 if has ('unix')
-   "cmap w!! w !sudo tee % 
+   cmap w!! w !sudo tee % 
 endif
+
 
 " Function keys {{{2
 
@@ -172,83 +197,88 @@ vnoremap <F1> <ESC>
 let NERDTreeIgnore=['.vim$', '\~$', '.*\.pyc$', 'pip-log\.txt$']
 
 " snipMate
-let g:snips_author='Tom Vincent <http://www.tlvince.com/contact/>'
-let g:snippets_dir="$XDG_CONFIG_HOME/vim/bundle/snipmate-snippets"
+let g:snips_author='Martin Leopold Ortbauer'
+"let g:snips_trigger_key='<S-Tab>'
+let g:snippets_dir="$XDG_CONFIG_HOME/vim/bundle/snipmate-snippets,$XDG_CONFIG_HOME/vim/snippets"
+
+" Grammar Check
+let g:languagetool_jar="/usr/share/languagetool/LanguageTool.jar"
+let g:languagetool_disable_rules="DE_CASE,WHITESPACE_RULE,EN_QUOTES,COMMA_PARENTHESIS_WHITESPACE"    
+
+" Gundo
+map <leader>g :GundoToggle<CR>
+
+" Tagbar
+nnoremap <F7> :TagbarToggle<CR>
+
+" map key for taglist
+noremap <F10> :TlistToggle<CR>
+
+" Tasklist
+map <leader>v <Plug>TaskList
+
+" MakeGreen
+map <Leader>] <Plug>MakeGreen
+
+" PEP8
+let g:pep8_map='<leader>8'
+
+" Pyflakes
+"let g:pyflakes_use_quickfix = 0
+
+" notmuch
+let g:notmuch_signature = ['mfg Martin' ]
+let g:notmuch_initial_search_words = ['tag:unread']
+let g:notmuch_folders = [
+        \ [ 'unread', 'tag:inbox and tag:unread and not folder:Sent' ],
+        \ [ 'inbox',  'tag:inbox and not tag:delete'                ],
+        \ [ 'spam',  'tag:spam and not tag:delete'                ],
+        \ [ 'sent',  'tag:sent and not tag:delete'                ],
+        \ [ 'delete',  'tag:delete'                ],
+        \ [ 'deleted',  'tag:deleted'                ],
+        \ ]
+
+let g:notmuch_folders_maps = {
+        \ 'm':          ':call <SID>NM_new_mail()<CR>',
+        \ 's':          ':call <SID>NM_search_prompt()<CR>',
+        \ 'q':          ':call <SID>NM_kill_this_buffer()<CR>',
+        \ '=':          ':call <SID>NM_folders_refresh_view()<CR>',
+        \ '<Enter>':    ':call <SID>NM_folders_show_search()<CR>',
+        \ }
+
+" --- --- bindings for search screen {{{2
+let g:notmuch_search_maps = {
+        \ '<Space>':    ':call <SID>NM_search_show_thread(0)<CR>',
+        \ '<Enter>':    ':call <SID>NM_search_show_thread(1)<CR>',
+        \ '<C-]>':      ':call <SID>NM_search_expand(''<cword>'')<CR>',
+        \ 'I':          ':call <SID>NM_search_mark_read_thread()<CR>',
+        \ 'a':          ':call <SID>NM_search_archive_thread()<CR>',
+        \ 'A':          ':call <SID>NM_search_mark_read_then_archive_thread()<CR>',
+        \ 'D':          ':call <SID>NM_search_delete_thread()<CR>',
+        \ 'f':          ':call <SID>NM_search_filter()<CR>',
+        \ 'm':          ':call <SID>NM_new_mail()<CR>',
+        \ 'o':          ':call <SID>NM_search_toggle_order()<CR>',
+        \ 'r':          ':call <SID>NM_search_reply_to_thread()<CR>',
+        \ 's':          ':call <SID>NM_search_prompt()<CR>',
+        \ ',s':         ':call <SID>NM_search_edit()<CR>',
+        \ 't':          ':call <SID>NM_search_filter_by_tag()<CR>',
+        \ 'q':          ':call <SID>NM_kill_this_buffer()<CR>',
+        \ '+':          ':call <SID>NM_search_add_tags([])<CR>',
+        \ '-':          ':call <SID>NM_search_remove_tags([])<CR>',
+        \ '=':          ':call <SID>NM_search_refresh_view()<CR>',
+        \ '?':          ':echo <SID>NM_search_thread_id() . ''  @ '' . join(<SID>NM_get_search_words())<CR>',
+        \ }
 
 " Autocommands {{{1
 if has('autocmd')
-   "" Always fold Python files
-   "autocmd! Filetype python set foldmethod=indent
-   "" Ein Tab entspricht vier Leerzeichen (wie in PEP 8 definiert)
-   "" Dies aber nur für python, damit es nicht mit anderen (ruby, c, Makefiles)
-   "" kolidiert
-   "autocmd! FileType python setlocal expandtab shiftwidth=4 tabstop=8 softtabstop=4
-   "" Start python on F5
    autocmd! FileType python map <F5> :w<CR>:!python2 "%"<CR>
+   autocmd BufEnter *.m    compiler mlint
 
    " Re-source vimrc whenever changes are saved
    "autocmd BufWritePost vimrc source $MYVIMRC
-
-   " Bind leader + p to preview Markdown files
-   autocmd! Filetype markdown nmap <leader>p :call PreviewMarkdown()<CR>
-
-   " Fold Markdown files based on the heading level
-   autocmd! Filetype markdown set foldmethod=expr foldexpr=HeadingLevel(v:lnum)
 endif
 
-" Functions {{{1
-
-" Preview Markdown files, depending on an external script.
-function! PreviewMarkdown()
-   :write
-   :silent !markdown "%"
-   :redraw!
-endfunction
-
-" Return the level of setext and atx style headers.
-" See: http://tech.groups.yahoo.com/group/vim/message/120033
-function! HeadingLevel(lnum)
-   let l1 = getline(a:lnum)
-
-   " Ignore empty lines
-   if l1 =~ '^\*$'
-       return '='
-   endif
-
-   " Setext-style headers begin on the line below
-   let l2 = getline(a:lnum+1)
-   if l2 =~ '^=\+\*'
-       return '>1'
-   elseif l2 =~ '^-\+\*'
-       return '>2'
-
-   " Check for atx-style headers
-   elseif l1 =~ '^#'
-       return '>'.matchend(l1, '^#\+')
-
-   " Otherwise keep the previous foldlevel
-   else
-       return '='
-   endif
-endfunction
-
 " Some personal preferences {{{1
-
-" Statusline Format
-set statusline=%<%F%h%m%r%h%w%y\ %{strftime(\"%d/%m/%Y-%H:%M\")}%=\ col:%c%V\ pos:%o\ lin:%l\,%L\ %P
-
-" map M to :marks
-noremap M :marks
-
-"" completion
-"set completeopt=longest,menuone
-"inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-"inoremap <expr> <C-n> pumvisible() ? '<C-n>' :
- ""\ '<C-n><C-r>=pumvisible() ? "\<lt>Down>" : ""<CR>'
-
-"inoremap <expr> <M-,> pumvisible() ? '<C-n>' :
- ""\ '<C-x><C-o><C-n><C-p><C-r>=pumvisible() ? "\<lt>Down>" : ""<CR>'
-
 
 "====================
 " syntax highlighting
@@ -257,21 +287,8 @@ noremap M :marks
 "au BufRead,BufNewFile *.inp set filetype=abaqus
 "au! Syntax abaqus source /home/martin/.vim/syntax/abaqus.vim
 
-" map key for taglist
-noremap <F8> :TlistToggle<CR>
 
-set ls=2
-let g:Tex_DefaultTargetFormat = 'pdf'
+"source /home/martin/.config/vim/python.vim
+"source /home/martin/.config/vim/mylatex.vim
+source /home/martin/.config/vim/addr.vim
 
-" These settings are needed for latex-suite
-let g:tex_flavor='latex'
-set grepprg=grep\ -nH\ $*
-
-set sw=2
-set iskeyword+=:
-
-source /home/martin/.config/vim/pythonvimrc
-source /home/martin/.config/vim/mylatex.vim
-
-" Replace the word under the cursor ,
-:nnoremap <Leader> :%s/\<<C-r><C-w>\>/
