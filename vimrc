@@ -158,6 +158,17 @@ if has ('unix')
    cmap w!! w !sudo tee % 
 endif
 
+" insert modeline
+" Append modeline after last line in buffer.
+" Use substitute() instead of printf() to handle '%%s' modeline in LaTeX
+" files.
+function! AppendModeline()
+  let l:modeline = printf(" vim: set ts=%d sw=%d tw=%d :",
+        \ &tabstop, &shiftwidth, &textwidth)
+  let l:modeline = substitute(&commentstring, "%s", l:modeline, "")
+  call append(line("$"), l:modeline)
+endfunction
+nnoremap <silent> <Leader>ml :call AppendModeline()<CR>
 
 " Function keys {{{2
 
@@ -198,7 +209,7 @@ let NERDTreeIgnore=['.vim$', '\~$', '.*\.pyc$', 'pip-log\.txt$']
 
 " snipMate
 let g:snips_author='Martin Leopold Ortbauer'
-"let g:snips_trigger_key='<S-Tab>'
+let g:snips_trigger_key='<F1>'
 let g:snippets_dir="$XDG_CONFIG_HOME/vim/bundle/snipmate-snippets,$XDG_CONFIG_HOME/vim/snippets"
 
 " Grammar Check
@@ -274,9 +285,14 @@ if has('autocmd')
    autocmd! FileType python map <F5> :w<CR>:!python2 "%"<CR>
    autocmd BufEnter *.m    compiler mlint
 
+   "autocmd BufRead,BufNewFile *.pst setlocal ft=pst
+   "autocmd FileType pst :setlocal syntax=tex
    " Re-source vimrc whenever changes are saved
    "autocmd BufWritePost vimrc source $MYVIMRC
 endif
+"augroup filetypedetect
+"au BufNewFile,BufRead *.pst setf pst
+"augroup END
 
 " Some personal preferences {{{1
 
@@ -289,6 +305,5 @@ endif
 
 
 "source /home/martin/.config/vim/python.vim
-"source /home/martin/.config/vim/mylatex.vim
 source /home/martin/.config/vim/addr.vim
 

@@ -1,0 +1,30 @@
+snippet modeline
+	${4:/*} vim:set sw=${1:8} ts=${2:8} tw=70 ft=${3}: ${5:*/}
+
+snippet timestamp
+	`system('date +%F\ %T')`
+
+snippet PKGL
+
+	# Original autor: Martin Ortbauer <mortbauer@gmail.com>
+	# Maintainer: Martin Ortbauer <mortbauer@gmail.com>
+	# Last edited: `system("date +%m-%d-%Y")`
+
+	pkgname=texlive-${1:name}
+	pkgver=${2}
+	pkgrel=${3}
+	license=('GPL')
+	depends=('texlive-core')
+	pkgdesc="${4}"
+	url="${5}"
+	arch=('any')
+	install=${6}.install
+	source=(${7})
+	md5sums=('${8}')
+
+	build()
+	{
+		mkdir -p $pkgdir/usr/share/texmf/tex/latex/$1
+		cp $srcdir/${9} $pkgdir/usr/share/texmf/tex/latex/$1
+	}
+

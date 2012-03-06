@@ -1,0 +1,178 @@
+snippet dinb
+	% {{{ Preamble
+	\documentclass[a4paper]{scrlttr2}
+	\usepackage{lmodern}
+	\usepackage[utf8]{inputenc}
+	\usepackage[T1]{fontenc}
+	\usepackage[english]{babel}
+	\usepackage{url}
+	% }}} Preamble
+	% {{{ Adress
+	\setkomavar{fromname}{Martin Ortbauer}
+	\setkomavar{fromaddress}{Spitzgarten 8\\ 4770 Andorf}
+	\setkomavar{fromphone}{+436801405084}
+	\setkomavar{fromemail}{mortbauer@gmail.com}
+	% }}} Adress
+	\begin{document}
+	
+	\begin{letter}{Director \\ Doe \& Co \\ 35 Anthony Road	\\ Newport \\ Ipswich IP3 5RT}
+	 
+	\KOMAoptions{fromphone=true,fromfax=false,fromemail=true}
+
+	\setkomavar{subject}{Wikipedia}
+	\setkomavar{customer}{2342}
+	
+	\opening{Dear Sir or Madam,}
+	 
+	I am writing to you on behalf of the Wikipedia project
+	(\url{http://www.wikipedia.org/}), an endeavour to build a
+	fully-fledged multilingual encyclopaedia in an entirely open
+	manner, to ask for permission to use your copyrighted material.
+	 
+	\ldots 
+	 
+	That said, allow me to reiterate that your material will be used
+	to the noble end of providing a free collection of knowledge for
+	everyone; naturally enough, only if you agree. If that is the
+	case, could you kindly fill in the attached form and post it back
+	to me? We shall greatly appreciate it.
+	 
+	Thank you for your time and consideration.
+	 
+	I look forward to your reply.
+	 
+	\closing{Yours Faithfully,}
+	\ps{P.S. You can find the full text of GFDL license at
+	\url{http://www.gnu.org/copyleft/fdl.html}.}
+	\encl{Copyright permission form}
+	 
+	\end{letter}
+	 
+	\end{document}
+
+snippet geom
+	% vim:set sw=8 ts=8 tw=70 ft=tex fdm=marker: 
+
+	%{{{ PREAMBLE
+	\documentclass{scrartcl}
+	\usepackage[latin1]{inputenc}
+	\usepackage[T1]{fontenc}
+	\usepackage[ngerman]{babel}
+	\usepackage[top=2cm,bottom=2cm,left=1cm,right=1cm]{geometry}
+	\usepackage{fancyhdr}
+
+	%}}} PREAMBLE
+	%{{{ SETTINGS, HEADER, AUTHOR ...
+	\renewcommand{\headrulewidth}{0pt}
+	\pagestyle{fancy}
+	\fancyhf{}
+	\title{Test}
+	\author{Martin Leopold Ortbauer}
+	\date{\today}
+	\fancyhead[C]{\framebox[\textwidth]{#1}}
+	%}}} SETTINGS, HEADER, AUTHOR ...
+	\begin{document}
+	\begin{center}
+	\framebox[\textwidth]{
+	  \begin{minipage}{\textwidth}
+	  #2
+	\end{minipage}
+	}
+	\end{center}
+	\end{document}
+
+snippet gbrief
+	\documentclass[english]{g-brief}
+	\usepackage[T1]{fontenc}
+	\usepackage[latin2]{inputenc}
+
+	\newcommand{\Sig}[1] % Signature
+	   { \Gruss{#1}{0.5cm} }
+
+	%\lochermarke
+	%\faltmarken
+	%\fenstermarken
+	%\trennlinien
+	%\klassisch
+
+	\begin{document}
+
+	\Name{Martin Ortbauer}
+	\Unterschrift{Martin Ortabuer}
+	\Strasse{Insinöörinkatu 60 D}
+	\Zusatz{341 A}
+	\Ort{33720 Tampere}
+	\Land{Finland}
+	\Telefon{+358 449574667}
+	\Telex{}
+	\EMail{mortbauer@gmail.com}
+	\HTTP{mortbauer.com}
+	\Bank{}
+	\BLZ{}
+	\Konto{}
+	\RetourAdresse{ } % Wichtig: Muss ein Leerzeichen sein, sonst gibt's
+					  % Probleme mit dem Brief-Fenster, falls ein Land
+					  % angegeben wird
+
+
+	\Adresse{Employer Research \\
+	London\\
+	E-Mail: \emph{application@employer.com}}
+
+
+	\Betreff{Application for a position in the Research Department}
+
+	\Postvermerk{}
+	\MeinZeichen{}
+	\IhrZeichen{}
+	\IhrSchreiben{}
+	\Anlagen{Resume}
+	\Verteiler{}
+
+
+	\Datum{\today}
+
+	\Anrede{Dear Mrs. Abc,}
+	\Sig{Yours sincerely,}
+
+	\begin{g-brief}
+	  
+	  Hereby I wish to apply for a position at the Research Department of
+	  Employer Research in London.
+	  
+	  Following a general interest in economic affairs, I studied
+	  \emph{General Economics} in Germany. I finished my studies in three
+	  years, graduated as best of class and received the Albert-Einstein
+	  award for re-inventing the weel. Etcetcetc.
+	  
+	  Working as an intern at the Beployer Research company I realized
+	  that I am truely interested in economic research. I have decided to
+	  apply at Employer Research in London, as \ldots
+	  
+	  Please do not hesitate to contact me if details regarding my CV or this
+	  application letter are unclear.
+	\end{g-brief}
+
+	\end{document}
+
+
+snippet revtex
+	% vim: set fdm=marker 
+	%{{{Preamble
+	\documentclass[prb,12pt]{revtex4}
+
+	\usepackage{amsmath}    % need for subequations
+	\usepackage{graphicx}   % need for figures
+	\usepackage{verbatim}   % useful for program listings
+	\usepackage{color}      % use if color is used in text
+	\usepackage{subfigure}  % use for side-by-side figures
+	\usepackage{hyperref}   % use for hypertext links, including those to external documents and URLs
+
+	\begin{comment}
+	\pagestyle{empty}		% use if page numbers not wanted
+	\end{comment}
+
+	%}}}Preamble
+	\begin{document}
+
+	\end{document}

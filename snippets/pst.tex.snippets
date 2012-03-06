@@ -1,0 +1,53 @@
+snippet basic
+	%{{{Preamble
+	\documentclass{article} 
+	\pagestyle{empty}
+	\usepackage[utf8x]{inputenc}
+	\usepackage{pst-pdf,pst-plot,pst-text,pst-coil,pst-node,pst-eucl}
+	\usepackage{fp}
+	\usepackage{multido}
+	\usepackage{xcolor}
+	\usepackage{graphicx}
+	\usepackage{stringstrings}
+	\DeclareGraphicsExtensions{.pdf,.png,.jpg}
+	%}}}Preamble
+	%{{{Dokument Start
+	\begin{document} 
+	\psset{xunit=1cm,yunit=1cm,runit=1cm}
+	\psset{arrowscale=1}
+	\begin{pspicture}(-5,-4)(11,10)
+	%}}}Dokument Start
+
+	%{{{Dokument End
+	\end{pspicture} 
+	\end{document}
+	/* vim: set ts=4 sw=2 tw=0 fdm=marker:*/
+	%}}}Dokument End
+snippet node
+	\pnode(${1:0}){${3:name}}
+snippet psnode
+	\psnode(${1:0}){${2:name}}{${3:stuff}}
+snippet narc
+	\ncarc*[]{${1:->}}{${2:A}}{${3:B}}
+snippet carc
+	\pstArcOAB[linecolor=red, linewidth=1.5\pslinewidth,arrows=->]
+		{${1:O}}{${2:A}}{${3:B}}
+snippet line
+	\pstLineAB[nodesepA=-.0, nodesepB=-0, 
+		linecolor=black, linewidth=1\pslinewidth,arrows=->]
+		{${1:A}}{${2:B}}
+snippet mangle
+	\pstMarkAngle[linecolor=red, arrows=->, linewidth=0.7\pslinewidth]
+	{${1:A}}{${2:O}}{${3:B}}{${4:$\gamma$}}
+snippet ncircle
+	\pstCircleOA[linecolor=red]{${1:A}}{${2:B}}
+snippet circle
+	\pstCircleOA[linecolor=green, Radius=\pstDistAB{${1:A}}{${2:C}}]{${3:B}}{}
+snippet canode
+	\pstCurvAbsNode{${1:O}}{${2:A}}{${3:P}}{\pstDistVal{${5:1}}}	
+snippet rot
+	\pstRotation[PosAngle=90, RotAngle=60, CodeFig=true,
+		CodeFigColor=blue,TransformLabel=${4:\theta}]
+		{${1:A}}{${2:B}}[${3:C}]
+snippet trans
+	\pstTranslation[DistCoef=1.5]{${1:A}}{${2:B}}{${3:E}}[${4:E'}]

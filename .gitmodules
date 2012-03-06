@@ -43,15 +43,6 @@
 [submodule "bundle/surround"]
 	path = bundle/surround
 	url = https://github.com/tpope/vim-surround.git
-[submodule "bundle/git"]
-	path = bundle/git
-	url = https://github.com/tpope/vim-git.git
-[submodule "bundle/command-t"]
-	path = bundle/command-t
-	url = https://github.com/wincent/Command-T.git
-[submodule "bundle/ack"]
-	path = bundle/ack
-	url = https://github.com/mileszs/ack.vim.git
 [submodule "bundle/makegreen"]
 	path = bundle/makegreen
 	url = https://github.com/reinh/vim-makegreen
@@ -88,3 +79,12 @@
 [submodule "bundle/vim-jinja"]
 	path = bundle/vim-jinja
 	url = https://github.com/uggedal/jinja-vim.git
+[submodule "bundle/vim-vicle"]
+	path = bundle/vim-vicle
+	url = https://github.com/vim-scripts/Vicle.git
+[submodule "bundle/vim-noweb"]
+	path = bundle/vim-noweb
+	url = https://github.com/vim-scripts/noweb.vim--McDermott.git
+[submodule "bundle/rainbow-parenthesis"]
+	path = bundle/rainbow-parenthesis
+	url = https://github.com/kien/rainbow_parentheses.vim.git
