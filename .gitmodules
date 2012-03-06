@@ -85,6 +85,3 @@
 [submodule "bundle/vim-noweb"]
 	path = bundle/vim-noweb
 	url = https://github.com/vim-scripts/noweb.vim--McDermott.git
-[submodule "bundle/rainbow-parenthesis"]
-	path = bundle/rainbow-parenthesis
-	url = https://github.com/kien/rainbow_parentheses.vim.git
