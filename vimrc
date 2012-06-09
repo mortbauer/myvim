@@ -305,5 +305,42 @@ endif
 
 
 "source /home/martin/.config/vim/python.vim
-source /home/martin/.config/vim/addr.vim
+"source /home/martin/.config/vim/addr.vim
 
+" {{{1  Google Translater 
+
+function! Translate(sl,tl)
+python << EOF
+import vim
+from BeautifulSoup import BeautifulSoup
+import urllib2
+import urllib
+import sys
+
+def translate(text,sl,tl):
+    querystring = urllib.urlencode({'sl':sl,'tl':tl,'text':text})
+    request = urllib2.Request('http://www.translate.google.com' + '?' + querystring )
+    request.add_header('User-Agent', 'Mozilla/5.0 (Windows; U; Windows NT 5.1; it; rv:1.8.1.11) Gecko/20071127 Firefox/2.0.0.11')
+    opener = urllib2.build_opener()
+    feeddata = opener.open(request).read()
+    soup = BeautifulSoup(feeddata)
+    return(str(soup.find('span', id="result_box").text))
+
+r = vim.eval('@@')
+t = translate(r,vim.eval("a:sl"),vim.eval("a:tl"))
+vim.command('normal hx')
+if vim.eval('@@')=='"':
+  vim.command('normal P')
+  vim.command('let @@="%s"'%t)
+  vim.command('normal p')
+else:
+  vim.command('normal P')
+  vim.command('let @@="%s"'%t)
+  vim.command('normal lp')
+
+vim.command('let @@="%s"'%r)
+
+EOF
+endfunction
+
+noremap <C-T> v /$\\|"/e-1<CR>d:call Translate("fin","en")<CR>:noh<CR>
