@@ -2,32 +2,33 @@
 " Copyright 2009-2011 Tom Vincent <http://www.tlvince.com/contact/>
 " vim: set fdm=marker:
 
-
 " Environment {{{1
 "
 " A consistent runtime environment.
-runtime! archlinux.vim
+"runtime! archlinux.vim
 
 " Forget about vi and set it first as it modifies future behaviour
 set nocompatible
 filetype off
 
 " Make vim respect the XDG base directory spec.
-set directory=$XDG_CACHE_HOME/vim,~/,/tmp
-set backupdir=$XDG_CACHE_HOME/vim,~/,/tmp
-set viminfo+=n$XDG_CACHE_HOME/vim/viminfo
-set runtimepath=$XDG_CONFIG_HOME/vim,$XDG_CONFIG_HOME/vim/after,$VIM,$VIMRUNTIME,/usr/share/vim/vimfiles/
-let $MYVIMRC="$XDG_CONFIG_HOME/vim/vimrc"
-set undodir=$XDG_CONFIG_HOME/vim/tmp
+if !exists("g:setted_environment") || &cp
+    set directory=$XDG_CACHE_HOME/vim,~/,/tmp
+    set backupdir=$XDG_CACHE_HOME/vim,~/,/tmp
+    set viminfo+=n$XDG_CACHE_HOME/vim/viminfo
+    set runtimepath=$XDG_CONFIG_HOME/vim,$XDG_CONFIG_HOME/vim/after,$VIM,$VIMRUNTIME,/usr/share/vim/vimfiles/
+    let $MYVIMRC="$XDG_CONFIG_HOME/vim/vimrc"
+    set undodir=$XDG_CONFIG_HOME/vim/tmp
+    let g:setted_environment = 1
+endif
 
 " Load plugins managed by pathogen
 call pathogen#infect()
 call pathogen#runtime_append_all_bundles()
 call pathogen#helptags()
 
-
+ 
 " General preferences {{{1
-"
 " Learn about these using vim help.
 set ttymouse=urxvt
 
@@ -36,7 +37,6 @@ set undofile
 
 " File based
 filetype plugin on      " Load file type plugins
-filetype indent on      " Enable file type based indentation
 syntax on               " Enable syntax highlighting
 
 " Tabbing
@@ -44,6 +44,7 @@ set tabstop=4           " The number of spaces a tab is
 set shiftwidth=4        " Number of spaces to use in auto(indent)
 set softtabstop=4       " Just to be clear
 set expandtab           " Insert tabs as spaces
+set cindent             " Kind of smart identitation
 
 " Searching
 set nowrapscan            " Wrap searches
@@ -61,7 +62,7 @@ set wrap                " Wrap long lines
 set ruler               " Show [line,col] number (in status bar)
 set showmode            " Persistent notice of current mode
 set history=200         " Number of ":" commands and searches to remember 
-set spelllang=de_de     " Speak proper English
+set spelllang=en_us     " Speak proper English
 set wildmenu            " dmenu style menu for commands
 set fillchars=""        " Remove characters in window split
 set encoding=utf-8      " Default encoding
@@ -71,9 +72,9 @@ set undolevels=1000     " Increase number of possible undos.
 set wildmode=list:longest,full " Complete to longest  string (list:longest) and then complete all full matches after another (full). Thanks to pbrisbin (http://pbrisbin.com:8080/dotfiles/vimrc).
 set mouse=a
 set backspace=indent,eol,start          " Allow backspacing on the given values
-set ls=2
-set sw=2
-set iskeyword+=:
+set laststatus=2
+"set shiftwidth=2
+"set iskeyword+=:
 set cursorline          " Heighlight the line the cursor is in
 
 " Visuals {{{1
@@ -112,7 +113,7 @@ map <F9> O<Esc>
 let mapleader = ","
 
 " Replace the word under the cursor ,
-nnoremap <Leader> :%s/\<<C-r><C-w>\>/
+nnoremap <Leader>r :%s/\<<C-r><C-w>\>/
 
 " Leader + v to open vimrc in a new tab
 nmap <leader>v :tabedit $MYVIMRC<CR>
@@ -121,7 +122,7 @@ nmap <leader>v :tabedit $MYVIMRC<CR>
 nmap <leader>t :tabnew<CR>
 
 " M to show marks
-noremap M :marks
+noremap M :marks<CR>
 
 " Open a file (relative to the current file)
 " See: http://vimcasts.org/episodes/the-edit-command/
@@ -132,23 +133,12 @@ map <leader>es :sp %%
 map <leader>ev :vsp %%
 map <leader>et :tabe %%
 
-" Silently open a shell in the directory of the current file
-if has("win32") || has("win64")
-   map , :silent !start cmd /k cd %:p:h <CR>
-endif
-
 " Return to normal mode
 inoremap jj <ESC>
 
 " Always move between wrapped lines
 nnoremap j gj
 nnoremap k gk
-
-" Move between splits with CTRL+[hjkl]
-nnoremap <C-h> <C-w>h       
-nnoremap <C-j> <C-w>j
-nnoremap <C-k> <C-w>k
-nnoremap <C-l> <C-w>l
 
 " Disable search highlighting
 nnoremap <leader><space> :nohlsearch<CR>
@@ -174,9 +164,6 @@ nnoremap <silent> <Leader>ml :call AppendModeline()<CR>
 
 " Toggle NERDTree plugin
 map <F2> :NERDTreeToggle<CR>
-
-" Toggle paste mode (particularly useful to temporarily disable autoindent)
-set pastetoggle=<F3>
 
 " Toggle spelling and show it' status
 map <F3> :setlocal spell! spell?<CR>
@@ -237,25 +224,26 @@ let g:pep8_map='<leader>8'
 " Pyflakes
 "let g:pyflakes_use_quickfix = 0
 
-" notmuch
-let g:notmuch_signature = ['mfg Martin' ]
-let g:notmuch_initial_search_words = ['tag:unread']
-let g:notmuch_folders = [
-        \ [ 'unread', 'tag:inbox and tag:unread and not folder:Sent' ],
-        \ [ 'inbox',  'tag:inbox and not tag:delete'                ],
-        \ [ 'spam',  'tag:spam and not tag:delete'                ],
-        \ [ 'sent',  'tag:sent and not tag:delete'                ],
-        \ [ 'delete',  'tag:delete'                ],
-        \ [ 'deleted',  'tag:deleted'                ],
-        \ ]
+" {{{2 Tabular
+if exists(":Tabularize")
+  nmap <Leader>a= :Tabularize /=<CR>
+  vmap <Leader>a= :Tabularize /=<CR>
+  nmap <Leader>a: :Tabularize /:\zs<CR>
+  vmap <Leader>a: :Tabularize /:\zs<CR>
+endif
 
-let g:notmuch_folders_maps = {
-        \ 'm':          ':call <SID>NM_new_mail()<CR>',
-        \ 's':          ':call <SID>NM_search_prompt()<CR>',
-        \ 'q':          ':call <SID>NM_kill_this_buffer()<CR>',
-        \ '=':          ':call <SID>NM_folders_refresh_view()<CR>',
-        \ '<Enter>':    ':call <SID>NM_folders_show_search()<CR>',
-        \ }
+inoremap <silent> <Bar>   <Bar><Esc>:call <SID>align()<CR>a
+ 
+function! s:align()
+  let p = '^\s*|\s.*\s|\s*$'
+  if exists(':Tabularize') && getline('.') =~# '^\s*|' && (getline(line('.')-1) =~# p || getline(line('.')+1) =~# p)
+    let column = strlen(substitute(getline('.')[0:col('.')],'[^|]','','g'))
+    let position = strlen(matchstr(getline('.')[0:col('.')],'.*|\s*\zs.*'))
+    Tabularize/|/l1
+    normal! 0
+    call search(repeat('[^|]*|',column).'\s\{-\}'.repeat('.',position),'ce',line('.'))
+  endif
+endfunction
 
 " --- --- bindings for search screen {{{2
 let g:notmuch_search_maps = {
@@ -284,28 +272,12 @@ let g:notmuch_search_maps = {
 if has('autocmd')
    autocmd! FileType python map <F5> :w<CR>:!python2 "%"<CR>
    autocmd BufEnter *.m    compiler mlint
-
-   "autocmd BufRead,BufNewFile *.pst setlocal ft=pst
-   "autocmd FileType pst :setlocal syntax=tex
-   " Re-source vimrc whenever changes are saved
-   "autocmd BufWritePost vimrc source $MYVIMRC
+   " restore cursor position
+   au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
+   " auto save when focus is lost
+   au FocusLost * silent! wa
+   autocmd BufWritePost vimrc source $MYVIMRC
 endif
-"augroup filetypedetect
-"au BufNewFile,BufRead *.pst setf pst
-"augroup END
-
-" Some personal preferences {{{1
-
-"====================
-" syntax highlighting
-"====================
-" Abaqus
-"au BufRead,BufNewFile *.inp set filetype=abaqus
-"au! Syntax abaqus source /home/martin/.vim/syntax/abaqus.vim
-
-
-"source /home/martin/.config/vim/python.vim
-"source /home/martin/.config/vim/addr.vim
 
 " {{{1  Google Translater 
 
