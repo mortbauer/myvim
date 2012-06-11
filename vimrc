@@ -30,6 +30,36 @@ call pathogen#helptags()
  
 " General preferences {{{1
 " Learn about these using vim help.
+
+" 256 colors if we can
+if $TERM =~ "-256color"
+  set t_Co=256
+endif
+
+" set the window title in screen
+if $STY != "" && !has('gui')
+  set t_ts=k
+  set t_fs=\
+endif
+
+" use folding if we can
+if has ('folding')
+  set foldenable
+  set foldmethod=marker
+  set foldmarker={{{,}}}
+  set foldcolumn=0
+endif
+
+" utf-8
+if has('multi_byte')
+  if &termencoding == ""
+    let &termencoding = &encoding
+  endif
+  set encoding=utf-8
+  setglobal fileencoding=utf-8
+  set fileencodings=ucs-bom,utf-8,latin1
+endif
+
 set ttymouse=urxvt
 
 " Persistent undos
@@ -37,7 +67,7 @@ set undofile
 
 " File based
 filetype plugin on      " Load file type plugins
-syntax on               " Enable syntax highlighting
+"syntax on               " Enable syntax highlighting
 
 " Tabbing
 set tabstop=4           " The number of spaces a tab is
@@ -71,7 +101,7 @@ set number              " Show line numbers
 set undolevels=1000     " Increase number of possible undos.
 set wildmode=list:longest,full " Complete to longest  string (list:longest) and then complete all full matches after another (full). Thanks to pbrisbin (http://pbrisbin.com:8080/dotfiles/vimrc).
 set mouse=a
-set backspace=indent,eol,start          " Allow backspacing on the given values
+"set backspace=indent,eol,start          " Allow backspacing on the given values
 set laststatus=2
 "set shiftwidth=2
 "set iskeyword+=:
@@ -82,20 +112,23 @@ set cursorline          " Heighlight the line the cursor is in
 " Set up gvim, colour schemes and the like.
 
 if has('gui_running')
-   if has('win32') || has('win64')
+    if has('win32') || has('win64')
        set guifont=DejaVu_Sans_Mono:h8,Consolas:h8,Courier_New:h8
-   else
+    else
        set guifont=Monospace\ 10                " Fallback to system default
-   endif
-   set guioptions-=T                       " Hide toolbar
-   set guioptions-=m                       " Hide menu bar
-   set guioptions-=r                       " Hide right hand scroll bar
-   set guioptions-=L                       " Hide left hand scroll bar
-   set background=dark
-   colorscheme solarized
+    endif
+    set guioptions-=T                       " Hide toolbar
+    set guioptions-=m                       " Hide menu bar
+    set guioptions-=r                       " Hide right hand scroll bar
+    set guioptions-=L                       " Hide left hand scroll bar
+    set background=dark
+    colorscheme solarized
 else
-   set background=dark
-   colorscheme zenburn
+    set background=dark
+    let g:zenburn_old_Visual = 1
+    let g:zenburn_alternate_Visual = 1
+    "let g:zenburn_high_Contrast = 1
+    colorscheme zenburn
 endif
 
 " Statusline Format
@@ -104,6 +137,9 @@ set statusline=%<%F%h%m%r%h%w%y\ %{strftime(\"%d/%m/%Y-%H:%M\")}%=\ col:%c%V\ po
 " Mappings {{{1
 "
 " vim does funny things with inline comments here, so don't use them.
+
+" fold evrything execpt search results
+nnoremap <leader>z :setlocal foldexpr=(getline(v:lnum)=~@/)?0:(getline(v:lnum-1)=~@/)\\|\\|(getline(v:lnum+1)=~@/)?1:2 foldmethod=expr foldlevel=0 foldcolumn=2<CR>
 
 " Insert newline without going into insert mode
 map <F8> o<Esc>
@@ -143,9 +179,9 @@ nnoremap k gk
 " Disable search highlighting
 nnoremap <leader><space> :nohlsearch<CR>
 
-" Sudo to write
+" save the current file as root
 if has ('unix')
-   cmap w!! w !sudo tee % 
+    cmap w!! w !sudo tee % >/dev/null<CR>:e!<CR><CR>
 endif
 
 " insert modeline
@@ -171,18 +207,18 @@ map <F3> :setlocal spell! spell?<CR>
 " Disabled keys {{{2
 
 " Disable arrow keys (force good habits)
-"nnoremap <up> <nop>
-"nnoremap <down> <nop>
-"nnoremap <left> <nop>
-"nnoremap <right> <nop>
-"inoremap <up> <nop>
-"inoremap <down> <nop>
-"inoremap <left> <nop>
-"inoremap <right> <nop>
-"vnoremap <up> <nop>
-"vnoremap <down> <nop>
-"vnoremap <left> <nop>
-"vnoremap <right> <nop>
+nnoremap <up> <nop>
+nnoremap <down> <nop>
+nnoremap <left> <nop>
+nnoremap <right> <nop>
+inoremap <up> <nop>
+inoremap <down> <nop>
+inoremap <left> <nop>
+inoremap <right> <nop>
+vnoremap <up> <nop>
+vnoremap <down> <nop>
+vnoremap <left> <nop>
+vnoremap <right> <nop>
 
 " Disable help key
 inoremap <F1> <ESC>
@@ -190,6 +226,10 @@ nnoremap <F1> <ESC>
 vnoremap <F1> <ESC>
 
 " Plugins {{{1
+" sessions
+" sessions
+let g:session_autosave = 1
+let g:session_autoload = 1
 
 " NERDTree
 let NERDTreeIgnore=['.vim$', '\~$', '.*\.pyc$', 'pip-log\.txt$']
@@ -209,8 +249,21 @@ map <leader>g :GundoToggle<CR>
 " Tagbar
 nnoremap <F7> :TagbarToggle<CR>
 
-" map key for taglist
-noremap <F10> :TlistToggle<CR>
+let g:tagbar_type_vb = {
+    \ 'ctagstype' : 'VB',
+    \ 'kinds'     : [
+        \ 's:subroutines',
+        \ 'f:functions',
+        \ 'v:variables',
+        \ 'g:globals',
+        \ 't:types',
+        \ 'c:constants',
+        \ 'n:names',
+        \ 'e:enums',
+        \ 'l:labels',
+        \ 'F:forms'
+    \ ]
+\ }
 
 " Tasklist
 map <leader>v <Plug>TaskList
@@ -245,29 +298,6 @@ function! s:align()
   endif
 endfunction
 
-" --- --- bindings for search screen {{{2
-let g:notmuch_search_maps = {
-        \ '<Space>':    ':call <SID>NM_search_show_thread(0)<CR>',
-        \ '<Enter>':    ':call <SID>NM_search_show_thread(1)<CR>',
-        \ '<C-]>':      ':call <SID>NM_search_expand(''<cword>'')<CR>',
-        \ 'I':          ':call <SID>NM_search_mark_read_thread()<CR>',
-        \ 'a':          ':call <SID>NM_search_archive_thread()<CR>',
-        \ 'A':          ':call <SID>NM_search_mark_read_then_archive_thread()<CR>',
-        \ 'D':          ':call <SID>NM_search_delete_thread()<CR>',
-        \ 'f':          ':call <SID>NM_search_filter()<CR>',
-        \ 'm':          ':call <SID>NM_new_mail()<CR>',
-        \ 'o':          ':call <SID>NM_search_toggle_order()<CR>',
-        \ 'r':          ':call <SID>NM_search_reply_to_thread()<CR>',
-        \ 's':          ':call <SID>NM_search_prompt()<CR>',
-        \ ',s':         ':call <SID>NM_search_edit()<CR>',
-        \ 't':          ':call <SID>NM_search_filter_by_tag()<CR>',
-        \ 'q':          ':call <SID>NM_kill_this_buffer()<CR>',
-        \ '+':          ':call <SID>NM_search_add_tags([])<CR>',
-        \ '-':          ':call <SID>NM_search_remove_tags([])<CR>',
-        \ '=':          ':call <SID>NM_search_refresh_view()<CR>',
-        \ '?':          ':echo <SID>NM_search_thread_id() . ''  @ '' . join(<SID>NM_get_search_words())<CR>',
-        \ }
-
 " Autocommands {{{1
 if has('autocmd')
    autocmd! FileType python map <F5> :w<CR>:!python2 "%"<CR>
@@ -275,7 +305,7 @@ if has('autocmd')
    " restore cursor position
    au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
    " auto save when focus is lost
-   au FocusLost * silent! wa
+   "au FocusLost * silent! wa
    autocmd BufWritePost vimrc source $MYVIMRC
 endif
 
@@ -296,7 +326,7 @@ def translate(text,sl,tl):
     opener = urllib2.build_opener()
     feeddata = opener.open(request).read()
     soup = BeautifulSoup(feeddata)
-    return(str(soup.find('span', id="result_box").text))
+    return(soup.find('span', id="result_box").text.encode("utf-8"))
 
 r = vim.eval('@@')
 t = translate(r,vim.eval("a:sl"),vim.eval("a:tl"))
@@ -315,4 +345,4 @@ vim.command('let @@="%s"'%r)
 EOF
 endfunction
 
-noremap <C-T> v /$\\|"/e-1<CR>d:call Translate("fin","en")<CR>:noh<CR>
+noremap <C-T> v /_$\\|"/e-1<CR>d:call Translate("fin","en")<CR>:noh<CR>
