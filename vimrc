@@ -1,35 +1,63 @@
-" vimrc: a monolithic vim setup. {{{1
-" Copyright 2009-2011 Tom Vincent <http://www.tlvince.com/contact/>
-" vim: set fdm=marker:
+" vimrc: a monolithic vim setup. 
+" vim: set fdm=marker ft=vim:
 
-" Environment {{{1
-"
-" A consistent runtime environment.
-"runtime! archlinux.vim
+" {{{ ENVIRONMENT 
 
 " Forget about vi and set it first as it modifies future behaviour
 set nocompatible
-filetype off
 
 " Make vim respect the XDG base directory spec.
 if !exists("g:setted_environment") || &cp
-    set directory=$XDG_CACHE_HOME/vim,~/,/tmp
-    set backupdir=$XDG_CACHE_HOME/vim,~/,/tmp
-    set viminfo+=n$XDG_CACHE_HOME/vim/viminfo
-    set runtimepath=$XDG_CONFIG_HOME/vim,$XDG_CONFIG_HOME/vim/after,$VIM,$VIMRUNTIME,/usr/share/vim/vimfiles/
-    let $MYVIMRC="$XDG_CONFIG_HOME/vim/vimrc"
+    set directory=$XDG_CACHE_HOME/vim/swp//
+    set backupdir=$XDG_CACHE_HOME/vim
     set undodir=$XDG_CONFIG_HOME/vim/tmp
+    set runtimepath=$VIM,$VIMRUNTIME,$XDG_CONFIG_HOME/vim
+    let viminfopath="$XDG_CACHE_HOME/vim/viminfo"
+    let $MYVIMRC="$XDG_CONFIG_HOME/vim/vimrc"
     let g:setted_environment = 1
+endif
+" }}} Environment
+" {{{ PATHOGEN
+" needed
+filetype off
+" To disable a plugin, add it's bundle name to the following list
+let g:pathogen_disabled = ['']
+
+" for some reason the csscolor plugin is very slow when run on the terminal
+" but not in GVim, so disable it if no GUI is running
+if !has('gui_running')
+    call add(g:pathogen_disabled, 'csscolor')
+endif
+
+" Gundo requires at least vim 7.3
+if v:version < '703' || !has('python')
+    call add(g:pathogen_disabled, 'gundo')
+endif
+
+if v:version < '702'
+    call add(g:pathogen_disabled, 'autocomplpop')
+    call add(g:pathogen_disabled, 'fuzzyfinder')
+    call add(g:pathogen_disabled, 'l9')
+endif
+if v:version < '700'
+    call add(g:pathogen_disabled, 'vim-python-mode')
 endif
 
 " Load plugins managed by pathogen
 call pathogen#infect()
-call pathogen#runtime_append_all_bundles()
+"call pathogen#runtime_append_all_bundles()
 call pathogen#helptags()
+" }}} PATHOGEN
+" {{{ PREFERENCES 
+"TODO
+"set ttymouse=urxvt " messes up vim inside screen
+" for correct colors with gnu screen
+set t_Co=256
+" Statusline Format
+"set statusline=%<%F%h%m%r%h%w%y\ %{strftime(\"%d/%m/%Y-%H:%M\")}%=\ col:%c%V\ pos:%o\ lin:%l\,%L\ %P
 
- 
-" General preferences {{{1
-" Learn about these using vim help.
+" doesn't discard changes when switching buffers, simply hides the buffer
+set hidden
 
 " 256 colors if we can
 if $TERM =~ "-256color"
@@ -60,21 +88,22 @@ if has('multi_byte')
   set fileencodings=ucs-bom,utf-8,latin1
 endif
 
-set ttymouse=urxvt
 
 " Persistent undos
 set undofile
 
 " File based
 filetype plugin on      " Load file type plugins
-"syntax on               " Enable syntax highlighting
+filetype indent on
+set nosmartindent
+set cindent             " Kind of smart identitation
+syntax on               " Enable syntax highlighting
 
 " Tabbing
 set tabstop=4           " The number of spaces a tab is
 set shiftwidth=4        " Number of spaces to use in auto(indent)
-set softtabstop=4       " Just to be clear
+set softtabstop=4       " Just to be clear"{{{"}}}
 set expandtab           " Insert tabs as spaces
-set cindent             " Kind of smart identitation
 
 " Searching
 set nowrapscan            " Wrap searches
@@ -101,13 +130,20 @@ set number              " Show line numbers
 set undolevels=1000     " Increase number of possible undos.
 set wildmode=list:longest,full " Complete to longest  string (list:longest) and then complete all full matches after another (full). Thanks to pbrisbin (http://pbrisbin.com:8080/dotfiles/vimrc).
 set mouse=a
-"set backspace=indent,eol,start          " Allow backspacing on the given values
+set backspace=indent,eol,start          " Allow backspacing on the given values
 set laststatus=2
-"set shiftwidth=2
-"set iskeyword+=:
 set cursorline          " Heighlight the line the cursor is in
-
-" Visuals {{{1
+set backspace=indent,eol,start " make backspace work like most other apps
+" }}} PREFERENCES 
+""{{{ Completion
+"inoremap <expr> <C-Space> pumvisible() \|\| &omnifunc == '' ?
+"\ "\<lt>C-n>" :
+"\ "\<lt>C-x>\<lt>C-o><c-r>=pumvisible() ?" .
+"\ "\"\\<lt>c-n>\\<lt>c-p>\\<lt>c-n>\" :" .
+"\ "\" \\<lt>bs>\\<lt>C-n>\"\<CR>"
+"imap <C-@> <C-Space>
+""}}} Completion
+" Visuals {{{
 "
 " Set up gvim, colour schemes and the like.
 
@@ -121,6 +157,8 @@ if has('gui_running')
     set guioptions-=m                       " Hide menu bar
     set guioptions-=r                       " Hide right hand scroll bar
     set guioptions-=L                       " Hide left hand scroll bar
+    set guioptions+=c                       " console dialogs instead of popups
+    set stal=0                              " don't show tabline
     set background=dark
     colorscheme solarized
 else
@@ -128,15 +166,28 @@ else
     let g:zenburn_old_Visual = 1
     let g:zenburn_alternate_Visual = 1
     "let g:zenburn_high_Contrast = 1
-    colorscheme zenburn
+    "colorscheme typofree
+    "colorscheme zenburn
+    colorscheme molokai_transparent
+    "colorscheme ir_black
+    "colorscheme 256-jungle
+    "colorscheme transparent
 endif
-
-" Statusline Format
-set statusline=%<%F%h%m%r%h%w%y\ %{strftime(\"%d/%m/%Y-%H:%M\")}%=\ col:%c%V\ pos:%o\ lin:%l\,%L\ %P
-
-" Mappings {{{1
+" }}} Visuals
+" Mappings {{{
 "
+" Map leader (the dedicated user-mapping prefix key) to comma
+let mapleader = ","
+
+" mximize current window
+map <F5> <C-W>_<C-W><Bar>
 " vim does funny things with inline comments here, so don't use them.
+
+" Toggle spelling and show it' status
+nnoremap <F3> :setlocal spell! spell?<CR>
+
+" map <M-a> to list the buffers, entering a number + <CR> will close the list
+nnoremap bb :buffers<CR>:buffer<Space>
 
 " fold evrything execpt search results
 nnoremap <leader>z :setlocal foldexpr=(getline(v:lnum)=~@/)?0:(getline(v:lnum-1)=~@/)\\|\\|(getline(v:lnum+1)=~@/)?1:2 foldmethod=expr foldlevel=0 foldcolumn=2<CR>
@@ -145,17 +196,8 @@ nnoremap <leader>z :setlocal foldexpr=(getline(v:lnum)=~@/)?0:(getline(v:lnum-1)
 map <F8> o<Esc>
 map <F9> O<Esc>
 
-" Map leader (the dedicated user-mapping prefix key) to comma
-let mapleader = ","
-
 " Replace the word under the cursor ,
-nnoremap <Leader>r :%s/\<<C-r><C-w>\>/
-
-" Leader + v to open vimrc in a new tab
-nmap <leader>v :tabedit $MYVIMRC<CR>
-
-" Leader + t to open a new tab
-nmap <leader>t :tabnew<CR>
+nnoremap <leader>r :%s/\<<C-r><C-w>\>/
 
 " M to show marks
 noremap M :marks<CR>
@@ -196,16 +238,10 @@ function! AppendModeline()
 endfunction
 nnoremap <silent> <Leader>ml :call AppendModeline()<CR>
 
-" Function keys {{{2
-
-" Toggle NERDTree plugin
-map <F2> :NERDTreeToggle<CR>
-
-" Toggle spelling and show it' status
-map <F3> :setlocal spell! spell?<CR>
-
-" Disabled keys {{{2
-
+" make current window as big as possible without closing
+"nnoremap <F5> <C-W>_<C-W><Bar>
+"}}} Mappings
+" {{{ Disabled keys 
 " Disable arrow keys (force good habits)
 nnoremap <up> <nop>
 nnoremap <down> <nop>
@@ -219,34 +255,136 @@ vnoremap <up> <nop>
 vnoremap <down> <nop>
 vnoremap <left> <nop>
 vnoremap <right> <nop>
-
 " Disable help key
 inoremap <F1> <ESC>
 nnoremap <F1> <ESC>
 vnoremap <F1> <ESC>
-
-" Plugins {{{1
-" sessions
-" sessions
-let g:session_autosave = 1
-let g:session_autoload = 1
-
-" NERDTree
+" }}} Disabled keys 
+" {{{ NERDTree
+nnoremap <F2> :NERDTreeToggle<CR>
 let NERDTreeIgnore=['.vim$', '\~$', '.*\.pyc$', 'pip-log\.txt$']
+" }}} NERDTree
+" {{{ python-mode
+" TODO, this plugin is responsible for slow vim startup, should be loaded
+" dynamically but don't know how
+" {{{ pylint
+" Load pylint code plugin
+let g:pymode_lint = 0
 
-" snipMate
+" Switch pylint, pyflakes, pep8, mccabe code-checkers
+" Can have multiply values "pep8,pyflakes,mcccabe"
+let g:pymode_lint_checker = "pyflakes,pep8,mccabe"
+
+" Skip errors and warnings
+let g:pymode_lint_ignore='E701,E231'
+
+" Select errors and warnings
+" E.g. "E4,W"
+let g:pymode_lint_select = ""
+
+" Run linter on the fly
+let g:pymode_lint_onfly = 0
+
+" Check code every save
+let g:pymode_lint_write = 0
+
+" Auto open cwindow if errors be finded
+let g:pymode_lint_cwindow = 1
+
+" Show error message if cursor placed at the error line
+let g:pymode_lint_message = 1
+
+" Auto jump on first error
+let g:pymode_lint_jump = 0
+
+" Hold cursor in current window
+" when quickfix is open
+let g:pymode_lint_hold = 0
+
+" Place error signs
+let g:pymode_lint_signs = 1
+
+" Maximum allowed mccabe complexity
+let g:pymode_lint_mccabe_complexity = 8
+
+" Minimal height of pylint error window
+let g:pymode_lint_minheight = 3
+
+" Maximal height of pylint error window
+let g:pymode_lint_maxheight = 6
+" }}}
+" {{{ pyrope
+" Load rope plugin
+let g:pymode_rope = 0
+
+" Auto create and open ropeproject
+let g:pymode_rope_auto_project = 1
+
+" Enable autoimport
+let g:pymode_rope_enable_autoimport = 1
+
+" Auto generate global cache
+let g:pymode_rope_autoimport_generate = 1
+
+let g:pymode_rope_autoimport_underlineds = 0
+
+let g:pymode_rope_codeassist_maxfixes = 10
+
+let g:pymode_rope_sorted_completions = 1
+
+let g:pymode_rope_extended_complete = 1
+
+let g:pymode_rope_autoimport_modules = ["os","shutil","datetime"]
+
+let g:pymode_rope_confirm_saving = 1
+
+let g:pymode_rope_global_prefix = "<C-x>p"
+
+let g:pymode_rope_local_prefix = "<C-c>r"
+
+let g:pymode_rope_vim_completion = 1
+
+let g:pymode_rope_guess_project = 1
+
+let g:pymode_rope_goto_def_newwin = ""
+
+let g:pymode_rope_always_show_complete_menu = 0
+" }}}
+" {{{ folding
+" Enable python folding
+let g:pymode_folding=1
+" }}}
+" {{{ run
+" Load run code plugin
+let g:pymode_run = 0
+
+" Key for run python code
+let g:pymode_run_key = '<F5>'
+" }}}
+" {{{ motion
+" Enable python objects and motion
+let g:pymode_motion = 0
+" }}}
+" }}}
+" {{{ vim-sessions
+let g:session_autosave=1
+let g:session_autoload=0
+let g:session_directory="/home/martin/.config/vim/sessions"
+set sessionoptions-=resize
+" }}} vim-sessions
+" {{{ snipMate
 let g:snips_author='Martin Leopold Ortbauer'
 let g:snips_trigger_key='<F1>'
 let g:snippets_dir="$XDG_CONFIG_HOME/vim/bundle/snipmate-snippets,$XDG_CONFIG_HOME/vim/snippets"
-
-" Grammar Check
-let g:languagetool_jar="/usr/share/languagetool/LanguageTool.jar"
-let g:languagetool_disable_rules="DE_CASE,WHITESPACE_RULE,EN_QUOTES,COMMA_PARENTHESIS_WHITESPACE"    
-
-" Gundo
-map <leader>g :GundoToggle<CR>
-
-" Tagbar
+" }}} snipMate
+" {{{ LanguageTool 
+let g:languagetool_jar="/data/local/share/LanguageTool/LanguageTool.jar"
+"let g:languagetool_disable_rules="DE_CASE,WHITESPACE_RULE,EN_QUOTES,COMMA_PARENTHESIS_WHITESPACE"    
+"}}}
+" {{{ Gundo
+nnoremap <leader>g :GundoToggle<CR>
+" }}} Gundo
+" {{{ Tagbar
 nnoremap <F7> :TagbarToggle<CR>
 
 let g:tagbar_type_vb = {
@@ -264,85 +402,113 @@ let g:tagbar_type_vb = {
         \ 'F:forms'
     \ ]
 \ }
-
-" Tasklist
-map <leader>v <Plug>TaskList
-
-" MakeGreen
-map <Leader>] <Plug>MakeGreen
-
-" PEP8
-let g:pep8_map='<leader>8'
-
-" Pyflakes
-"let g:pyflakes_use_quickfix = 0
-
-" {{{2 Tabular
+" }}} Tagbar
+"{{{ Tasklist
+nnoremap <leader>v <Plug>TaskList
+"}}} Tasklist
+"{{{ MakeGreen
+nnoremap <Leader>] <Plug>MakeGreen
+"}}} MakeGreen
+" {{{  Google Translater 
+noremap <C-T> v /_$\\|"/e-1<CR>d:call Translate("fin","en")<CR>:noh<CR>
+" }}}  Google Translater 
+" {{{1 Tabular
 if exists(":Tabularize")
   nmap <Leader>a= :Tabularize /=<CR>
   vmap <Leader>a= :Tabularize /=<CR>
   nmap <Leader>a: :Tabularize /:\zs<CR>
   vmap <Leader>a: :Tabularize /:\zs<CR>
 endif
-
-inoremap <silent> <Bar>   <Bar><Esc>:call <SID>align()<CR>a
- 
-function! s:align()
-  let p = '^\s*|\s.*\s|\s*$'
-  if exists(':Tabularize') && getline('.') =~# '^\s*|' && (getline(line('.')-1) =~# p || getline(line('.')+1) =~# p)
-    let column = strlen(substitute(getline('.')[0:col('.')],'[^|]','','g'))
-    let position = strlen(matchstr(getline('.')[0:col('.')],'.*|\s*\zs.*'))
-    Tabularize/|/l1
-    normal! 0
-    call search(repeat('[^|]*|',column).'\s\{-\}'.repeat('.',position),'ce',line('.'))
+" }}}1 Tabular
+" {{{ Latex
+"{{{ LatexBox 
+let g:LatexBox_viewer = 'evince'
+let g:LatexBox_latexmk_options = '-pvc'
+"}}} LatexBox
+""not needed as already provided, probably through LatexBox
+"function! PsTricks()
+    "cexpr system('latexmk -shell-escape ' . expand('%'))
+    "cexpr system('dvips ' . expand('%<') . '.dvi')
+    "cexpr system('ps2pdf ' . expand('%<') . '.ps')
+"endfunction
+"noremap <F5> :call PsTricks()<CR>
+"}}} Latex
+" {{{ statline
+let g:statline_mixed_indent = 0
+let g:statline_trailing_space=0
+let g:statline_filename_relative = 1
+let g:statline_fugitive = 1
+let g:statline_syntastic = 1
+"hi link User1 SpellCap
+" }}} statline
+" {{{ Syntastic
+let g:syntastic_mode_map = { 'mode': 'passive'}
+" }}} Syntastic
+" {{{ FuzzyFinder
+nnoremap <silent> <C-f>b     :FufBuffer<CR>
+nnoremap <silent> <C-f>f     :FufFile<CR>
+" }}} FuzzyFinder
+" Autocommands {{{
+if has('autocmd')
+   "autocmd BufEnter *.m    compiler mlint
+   " restore cursor position
+   "au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
+   " reload vimrc
+   "autocmd BufWritePost vimrc source $MYVIMRC
+   " skeletons for new files
+   autocmd! BufNewFile * silent! 0r $XDG_CONFIG_HOME/vim/skel/tmpl.%:e
+endif
+" }}} 
+" {{{ Maximize
+" maximize at startup
+"
+if has("gui_running")
+  " GUI is running or is about to start.
+  " Maximize gvim window.
+  set lines=999 columns=999
+else
+  " This is console Vim.
+  if exists("+lines")
+    set lines=50
+  endif
+  if exists("+columns")
+    set columns=100
+  endif
+endif
+" not working, but once it was
+let w:windowmaximized = 0
+function! MaxRestoreWindow()
+  if w:windowmaximized == 1
+    let w:windowmaximized = 0
+    " restore the window
+    :simalt ~r
+  else
+    let w:windowmaximized = 1
+    " maximize the window
+    :simalt ~x
   endif
 endfunction
-
-" Autocommands {{{1
-if has('autocmd')
-   autocmd! FileType python map <F5> :w<CR>:!python2 "%"<CR>
-   autocmd BufEnter *.m    compiler mlint
-   " restore cursor position
-   au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
-   " auto save when focus is lost
-   "au FocusLost * silent! wa
-   autocmd BufWritePost vimrc source $MYVIMRC
-endif
-
-" {{{1  Google Translater 
-
-function! Translate(sl,tl)
-python << EOF
-import vim
-from BeautifulSoup import BeautifulSoup
-import urllib2
-import urllib
-import sys
-
-def translate(text,sl,tl):
-    querystring = urllib.urlencode({'sl':sl,'tl':tl,'text':text})
-    request = urllib2.Request('http://www.translate.google.com' + '?' + querystring )
-    request.add_header('User-Agent', 'Mozilla/5.0 (Windows; U; Windows NT 5.1; it; rv:1.8.1.11) Gecko/20071127 Firefox/2.0.0.11')
-    opener = urllib2.build_opener()
-    feeddata = opener.open(request).read()
-    soup = BeautifulSoup(feeddata)
-    return(soup.find('span', id="result_box").text.encode("utf-8"))
-
-r = vim.eval('@@')
-t = translate(r,vim.eval("a:sl"),vim.eval("a:tl"))
-vim.command('normal hx')
-if vim.eval('@@')=='"':
-  vim.command('normal P')
-  vim.command('let @@="%s"'%t)
-  vim.command('normal p')
-else:
-  vim.command('normal P')
-  vim.command('let @@="%s"'%t)
-  vim.command('normal lp')
-
-vim.command('let @@="%s"'%r)
-
-EOF
+"map <F5> :call MaxRestoreWindow()<CR>
+"toggles whether or not the current window is automatically zoomed
+function! ToggleMaxWins()
+  if exists('g:windowMax')
+    au! maxCurrWin
+    wincmd =
+    unlet g:windowMax
+  else
+    augroup maxCurrWin
+        " au BufEnter * wincmd _ | wincmd |
+        "
+        " only max it vertically
+        au! WinEnter * wincmd _
+    augroup END
+    do maxCurrWin WinEnter
+    let g:windowMax=1
+  endif
 endfunction
-
-noremap <C-T> v /_$\\|"/e-1<CR>d:call Translate("fin","en")<CR>:noh<CR>
+nnoremap <Leader>max :call ToggleMaxWins()<CR>
+" }}} Maximize
+" {{{ RIV
+"let g:riv_ignored_imaps = "<Tab>,<S-Tab>"
+let g:riv_ignored_imaps = "<BS>"
+" }}} RIV
