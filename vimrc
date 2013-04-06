@@ -2,21 +2,24 @@
 " vim: set fdm=marker ft=vim:
 
 " {{{ ENVIRONMENT 
-
-" Forget about vi and set it first as it modifies future behaviour
-set nocompatible
-
 " Make vim respect the XDG base directory spec.
+" from: http://tlvince.com/vim-respect-xdg
 if !exists("g:setted_environment") || &cp
-    set directory=$XDG_CACHE_HOME/vim/swp//
-    set backupdir=$XDG_CACHE_HOME/vim
-    set undodir=$XDG_CONFIG_HOME/vim/tmp
-    set runtimepath=$VIM,$VIMRUNTIME,$XDG_CONFIG_HOME/vim
-    let viminfopath="$XDG_CACHE_HOME/vim/viminfo"
+    set directory=$XDG_CACHE_HOME/vim/swp//,~/,/tmp
+    if version >= 703
+        " Persistent undos
+        set undodir=$XDG_CONFIG_HOME/vim/tmp,~/,/tmp
+        set undofile
+    endif
+    set backupdir=$XDG_CACHE_HOME/vim,~/,/tmp
+    set runtimepath=$XDG_CONFIG_HOME/vim,$VIM,$VIMRUNTIME
+    set viminfo+=n$XDG_CACHE_HOME/vim/viminfo
     let $MYVIMRC="$XDG_CONFIG_HOME/vim/vimrc"
     let g:setted_environment = 1
 endif
 " }}} Environment
+" Forget about vi and set it first as it modifies future behaviour
+set nocompatible
 " {{{ PATHOGEN
 " needed
 filetype off
@@ -40,7 +43,7 @@ if v:version < '702'
     call add(g:pathogen_disabled, 'l9')
 endif
 if v:version < '700'
-    call add(g:pathogen_disabled, 'vim-python-mode')
+    call add(g:pathogen_disabled, 'python-mode')
 endif
 
 " Load plugins managed by pathogen
@@ -89,8 +92,6 @@ if has('multi_byte')
 endif
 
 
-" Persistent undos
-set undofile
 
 " File based
 filetype plugin on      " Load file type plugins
@@ -135,14 +136,6 @@ set laststatus=2
 set cursorline          " Heighlight the line the cursor is in
 set backspace=indent,eol,start " make backspace work like most other apps
 " }}} PREFERENCES 
-""{{{ Completion
-"inoremap <expr> <C-Space> pumvisible() \|\| &omnifunc == '' ?
-"\ "\<lt>C-n>" :
-"\ "\<lt>C-x>\<lt>C-o><c-r>=pumvisible() ?" .
-"\ "\"\\<lt>c-n>\\<lt>c-p>\\<lt>c-n>\" :" .
-"\ "\" \\<lt>bs>\\<lt>C-n>\"\<CR>"
-"imap <C-@> <C-Space>
-""}}} Completion
 " Visuals {{{
 "
 " Set up gvim, colour schemes and the like.
@@ -238,8 +231,6 @@ function! AppendModeline()
 endfunction
 nnoremap <silent> <Leader>ml :call AppendModeline()<CR>
 
-" make current window as big as possible without closing
-"nnoremap <F5> <C-W>_<C-W><Bar>
 "}}} Mappings
 " {{{ Disabled keys 
 " Disable arrow keys (force good habits)
@@ -369,7 +360,7 @@ let g:pymode_motion = 0
 " {{{ vim-sessions
 let g:session_autosave=1
 let g:session_autoload=0
-let g:session_directory="/home/martin/.config/vim/sessions"
+let g:session_directory=expand("$XDG_CONFIG_HOME/vim/sessions")
 set sessionoptions-=resize
 " }}} vim-sessions
 " {{{ snipMate
@@ -426,11 +417,18 @@ let g:LatexBox_viewer = 'evince'
 let g:LatexBox_latexmk_options = '-pvc'
 "}}} LatexBox
 ""not needed as already provided, probably through LatexBox
-"function! PsTricks()
-    "cexpr system('latexmk -shell-escape ' . expand('%'))
-    "cexpr system('dvips ' . expand('%<') . '.dvi')
-    "cexpr system('ps2pdf ' . expand('%<') . '.ps')
-"endfunction
+function! PsTricks()
+    python << EOF
+import os
+import vim
+import subprocess
+filepath = vim.current.buffer.name
+res = subprocess.call(['latex','-interaction','batchmode',filepath],cwd=os.path.split(filepath)[0],stdout=open(os.devnull,'w'))
+subprocess.call(['dvips',os.path.splitext(filepath)[0]],
+cwd=os.path.split(filepath)[0],stderr=open(os.devnull,'w'),stdout=open(os.devnull,'w'))
+subprocess.call(['ps2pdf',os.path.splitext(filepath)[0]+'.ps'],cwd=os.path.split(filepath)[0],stdout=open(os.devnull,'w'))
+EOF
+endfunction
 "noremap <F5> :call PsTricks()<CR>
 "}}} Latex
 " {{{ statline
@@ -460,53 +458,7 @@ if has('autocmd')
 endif
 " }}} 
 " {{{ Maximize
-" maximize at startup
-"
-if has("gui_running")
-  " GUI is running or is about to start.
-  " Maximize gvim window.
-  set lines=999 columns=999
-else
-  " This is console Vim.
-  if exists("+lines")
-    set lines=50
-  endif
-  if exists("+columns")
-    set columns=100
-  endif
-endif
-" not working, but once it was
-let w:windowmaximized = 0
-function! MaxRestoreWindow()
-  if w:windowmaximized == 1
-    let w:windowmaximized = 0
-    " restore the window
-    :simalt ~r
-  else
-    let w:windowmaximized = 1
-    " maximize the window
-    :simalt ~x
-  endif
-endfunction
-"map <F5> :call MaxRestoreWindow()<CR>
-"toggles whether or not the current window is automatically zoomed
-function! ToggleMaxWins()
-  if exists('g:windowMax')
-    au! maxCurrWin
-    wincmd =
-    unlet g:windowMax
-  else
-    augroup maxCurrWin
-        " au BufEnter * wincmd _ | wincmd |
-        "
-        " only max it vertically
-        au! WinEnter * wincmd _
-    augroup END
-    do maxCurrWin WinEnter
-    let g:windowMax=1
-  endif
-endfunction
-nnoremap <Leader>max :call ToggleMaxWins()<CR>
+noremap <leader>max :call ToggleRolodexTab()<CR>
 " }}} Maximize
 " {{{ RIV
 "let g:riv_ignored_imaps = "<Tab>,<S-Tab>"
