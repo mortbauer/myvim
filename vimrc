@@ -20,44 +20,58 @@ endif
 " }}} Environment
 " Forget about vi and set it first as it modifies future behaviour
 set nocompatible
-" {{{ PATHOGEN
-" needed
-filetype off
-" To disable a plugin, add it's bundle name to the following list
-let g:pathogen_disabled = ['']
+" {{{ Vundle
+set nocompatible               " be iMproved
+ filetype off                   " required!
 
-" for some reason the csscolor plugin is very slow when run on the terminal
-" but not in GVim, so disable it if no GUI is running
-if !has('gui_running')
-    call add(g:pathogen_disabled, 'csscolor')
-endif
+ set rtp+=~/.config/vim/vundle/
+ call vundle#rc("$HOME/.config/vim/vundles")
 
-" Gundo requires at least vim 7.3
-if v:version < '703' || !has('python')
-    call add(g:pathogen_disabled, 'gundo')
-endif
+ " let Vundle manage Vundle
+ " required! 
+ Bundle 'gmarik/vundle'
 
-if v:version < '702'
-    call add(g:pathogen_disabled, 'autocomplpop')
-    call add(g:pathogen_disabled, 'fuzzyfinder')
-    call add(g:pathogen_disabled, 'l9')
-endif
-if v:version < '700'
-    call add(g:pathogen_disabled, 'python-mode')
-endif
+ " My Bundles here:
+ "
+ " colorschemes
+ Bundle 'molokai'
+ Bundle 'gmarik/ingretu'
+ " original repos on github
+ Bundle 'mileszs/ack.vim'
+ Bundle 'scrooloose/nerdcommenter'
+ Bundle 'tpope/vim-fugitive'
+ Bundle 'scrooloose/nerdtree'
+ Bundle 'klen/python-mode'
+ Bundle 'majutsushi/tagbar'
+ Bundle 'wincent/Command-T'
+ Bundle 'erisian/rest_tools'
+ "Bundle 'Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'}
+ " vim-scripts repos
+ Bundle 'L9'
+ Bundle 'minibufexpl.vim'
+ " non github repos
+ "Bundle 'git://git.wincent.com/command-t.git'
+ " local repos
+ Bundle '/data/devel/vim/molokai-transparent/.git', {'sync':'no'}
+ " ...
 
-" Load plugins managed by pathogen
-call pathogen#infect()
-"call pathogen#runtime_append_all_bundles()
-call pathogen#helptags()
-" }}} PATHOGEN
+ filetype plugin indent on     " required!
+ "
+ " see :h vundle for more details or wiki for FAQ
+ " NOTE: comments after Bundle command are not allowed..
+" }}}
 " {{{ PREFERENCES 
 "TODO
+" Enable filetype plugins
+filetype plugin on
+filetype indent on
+" change directory to current file
+set autochdir
 "set ttymouse=urxvt " messes up vim inside screen
 " for correct colors with gnu screen
 set t_Co=256
 " Statusline Format
-"set statusline=%<%F%h%m%r%h%w%y\ %{strftime(\"%d/%m/%Y-%H:%M\")}%=\ col:%c%V\ pos:%o\ lin:%l\,%L\ %P
+set statusline=%<%F%h%m%r%h%w%y\ %{strftime(\"%d/%m/%Y-%H:%M\")}%=\ col:%c%V\ pos:%o\ lin:%l\,%L\ %P
 
 " doesn't discard changes when switching buffers, simply hides the buffer
 set hidden
@@ -91,11 +105,7 @@ if has('multi_byte')
   set fileencodings=ucs-bom,utf-8,latin1
 endif
 
-
-
 " File based
-filetype plugin on      " Load file type plugins
-filetype indent on
 set nosmartindent
 set cindent             " Kind of smart identitation
 syntax on               " Enable syntax highlighting
@@ -119,7 +129,7 @@ set hlsearch            " ... as you type
 set wrap                " Wrap long lines
 
 " General
-set ruler               " Show [line,col] number (in status bar)
+"set ruler               " Show [line,col] number (in status bar)
 set showmode            " Persistent notice of current mode
 set history=200         " Number of ":" commands and searches to remember 
 set spelllang=en_us     " Speak proper English
@@ -153,7 +163,7 @@ if has('gui_running')
     set guioptions+=c                       " console dialogs instead of popups
     set stal=0                              " don't show tabline
     set background=dark
-    colorscheme solarized
+    colorscheme molokai
 else
     set background=dark
     let g:zenburn_old_Visual = 1
@@ -161,7 +171,8 @@ else
     "let g:zenburn_high_Contrast = 1
     "colorscheme typofree
     "colorscheme zenburn
-    colorscheme molokai_transparent
+    colorscheme molokai
+    "let g:Powerline_symbols = 'unicode'
     "colorscheme ir_black
     "colorscheme 256-jungle
     "colorscheme transparent
@@ -369,7 +380,7 @@ let g:snips_trigger_key='<F1>'
 let g:snippets_dir="$XDG_CONFIG_HOME/vim/bundle/snipmate-snippets,$XDG_CONFIG_HOME/vim/snippets"
 " }}} snipMate
 " {{{ LanguageTool 
-let g:languagetool_jar="/data/local/share/LanguageTool/LanguageTool.jar"
+let g:languagetool_jar="/usr/share/java/languagetool/languagetool-commandline.jar"
 "let g:languagetool_disable_rules="DE_CASE,WHITESPACE_RULE,EN_QUOTES,COMMA_PARENTHESIS_WHITESPACE"    
 "}}}
 " {{{ Gundo
@@ -455,6 +466,8 @@ if has('autocmd')
    "autocmd BufWritePost vimrc source $MYVIMRC
    " skeletons for new files
    autocmd! BufNewFile * silent! 0r $XDG_CONFIG_HOME/vim/skel/tmpl.%:e
+   " http://onethingwell.org/post/1591226959/autocomplete-words-in-vim
+   autocmd! FileType rst set complete+=k/usr/share/dict/usa
 endif
 " }}} 
 " {{{ Maximize
@@ -464,3 +477,21 @@ noremap <leader>max :call ToggleRolodexTab()<CR>
 "let g:riv_ignored_imaps = "<Tab>,<S-Tab>"
 let g:riv_ignored_imaps = "<BS>"
 " }}} RIV
+" {{{ Completion
+"code completion: http://vim.wikia.com/wiki/Omni_completion
+set omnifunc=syntaxcomplete#Complete
+" }}}
+" {{{ powerline
+"set guifont=DejaVu\ Sans\ Mono\ for\ Powerline\ 9
+"set laststatus=2
+" }}}
+" {{{ python settings
+augroup vimrc_autocmds
+    autocmd!
+    " highlight characters past column 120
+    autocmd FileType python highlight Excess ctermbg=DarkGrey guibg=Black
+    autocmd FileType python match Excess /\%80v.*/
+    autocmd FileType python set nowrap
+augroup END
+" }}}
+
