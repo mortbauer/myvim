@@ -20,6 +20,10 @@ endif
 " }}} Environment
 " Forget about vi and set it first as it modifies future behaviour
 set nocompatible
+" {{{ vim-project
+"let g:project_enable_welcome = 0
+"let g:project_use_nerdtree = 1
+" }}}
 " {{{ Vundle
 set nocompatible               " be iMproved
  filetype off                   " required!
@@ -37,6 +41,8 @@ set nocompatible               " be iMproved
  Bundle 'molokai'
  Bundle 'gmarik/ingretu'
  " original repos on github
+ "Bundle 'amiorin/vim-project'
+ Bundle 'chrisbra/Recover.vim'
  Bundle 'mileszs/ack.vim'
  Bundle 'scrooloose/nerdcommenter'
  Bundle 'tpope/vim-fugitive'
@@ -45,14 +51,19 @@ set nocompatible               " be iMproved
  Bundle 'majutsushi/tagbar'
  Bundle 'wincent/Command-T'
  Bundle 'erisian/rest_tools'
+ "Bundle 'rsmenon/vim-mathematica'
+ "Bundle 'ivanov/vim-ipython'
+ "Bundle 'johndgiese/vipy'
+ "Bundle 'fholgado/minibufexpl.vim'
+ Bundle 'jeetsukumaran/vim-buffergator'
  "Bundle 'Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'}
  " vim-scripts repos
  Bundle 'L9'
- Bundle 'minibufexpl.vim'
  " non github repos
  "Bundle 'git://git.wincent.com/command-t.git'
  " local repos
  Bundle '/data/devel/vim/molokai-transparent/.git', {'sync':'no'}
+ Bundle '/data/devel/vim/vim-ipython/.git', {'sync':'no'}
  " ...
 
  filetype plugin indent on     " required!
@@ -60,8 +71,21 @@ set nocompatible               " be iMproved
  " see :h vundle for more details or wiki for FAQ
  " NOTE: comments after Bundle command are not allowed..
 " }}}
+"" {{{ vim-project projects
+"call project#rc("/data/devel")
+
+"Project  '~/.config/vim/'               , 'vim'
+"Project  'python/python-libmed/'        , 'libmed'
+"Callback 'libmed'                       , 'LibmedSettings'
+
+"function! LibmedSettings()
+    "setlocal tags+=/data/med3.0.6/include/tags
+"endfunction
+"" }}}
 " {{{ PREFERENCES 
 "TODO
+" vim syntax highlighting is slow for long lines, better disable then be slow
+set synmaxcol=100
 " Enable filetype plugins
 filetype plugin on
 filetype indent on
@@ -367,6 +391,9 @@ let g:pymode_run_key = '<F5>'
 " Enable python objects and motion
 let g:pymode_motion = 0
 " }}}
+" {{{ virtualenv
+let g:pymode_virtualenv = 1
+" }}}
 " }}}
 " {{{ vim-sessions
 let g:session_autosave=1
@@ -412,7 +439,7 @@ nnoremap <leader>v <Plug>TaskList
 nnoremap <Leader>] <Plug>MakeGreen
 "}}} MakeGreen
 " {{{  Google Translater 
-noremap <C-T> v /_$\\|"/e-1<CR>d:call Translate("fin","en")<CR>:noh<CR>
+"noremap <C-T> v /_$\\|"/e-1<CR>d:call Translate("fin","en")<CR>:noh<CR>
 " }}}  Google Translater 
 " {{{1 Tabular
 if exists(":Tabularize")
@@ -489,9 +516,17 @@ set omnifunc=syntaxcomplete#Complete
 augroup vimrc_autocmds
     autocmd!
     " highlight characters past column 120
-    autocmd FileType python highlight Excess ctermbg=DarkGrey guibg=Black
-    autocmd FileType python match Excess /\%80v.*/
-    autocmd FileType python set nowrap
+    autocmd FileType python,pyrex highlight Excess ctermbg=DarkGrey guibg=Black
+    autocmd FileType python,pyrex match Excess /\%80v.*/
+    autocmd FileType python,pyrex set nowrap
 augroup END
 " }}}
-
+" {{{ Minibufexpl
+"http://blog.dispatched.ch/2009/05/24/vim-as-python-ide/
+"let g:miniBufExplMapWindowNavVim = 1
+"let g:miniBufExplMapWindowNavArrows = 1
+"let g:miniBufExplMapCTabSwitchBufs = 1
+"let g:miniBufExplModSelTarget = 1
+" }}}
+" {{{ completion menu
+" }}}
