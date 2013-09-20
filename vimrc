@@ -3,24 +3,34 @@
 
 " {{{ ENVIRONMENT 
 if !exists("$XDG_CONFIG_HOME")
-    XDG_CONFIG_HOME=$HOME/.config
+    let s:xdg_config_home=$HOME/.config
+else
+    let s:xdg_config_home=$XDG_CONFIG_HOME
 endif
 if !exists("$XDG_CACHE_HOME")
-    XDG_CONFIG_HOME=$HOME/.cache
+    let s:xdg_cache_home=$HOME/.cache
+else
+    let s:xdg_cache_home=$XDG_CACHE_HOME
 endif
 " Make vim respect the XDG base directory spec.
 " from: http://tlvince.com/vim-respect-xdg
 if !exists("g:setted_environment") || &cp
-    set directory=$XDG_CACHE_HOME/vim/swp//,~/,/tmp
+    if !isdirectory(s:xdg_cache_home . '/vim/swp')
+        call mkdir(s:xdg_cache_home . '/vim/swp', "p")
+    endif
+    if !isdirectory(s:xdg_config_home . '/vim/tmp')
+        call mkdir(s:xdg_config_home . '/vim/tmp', "p")
+    endif
+    set directory=s:xdg_cache_home/vim/swp//,~/,/tmp
     if version >= 703
         " Persistent undos
-        set undodir=$XDG_CONFIG_HOME/vim/tmp,~/,/tmp
+        set undodir=s:xdg_config_home/vim/tmp,~/,/tmp
         set undofile
     endif
-    set backupdir=$XDG_CACHE_HOME/vim,~/,/tmp
-    set runtimepath=$XDG_CONFIG_HOME/vim,$VIM,$VIMRUNTIME,$VIM/vimfiles
-    set viminfo+=n$XDG_CACHE_HOME/vim/viminfo
-    let $MYVIMRC="$XDG_CONFIG_HOME/vim/vimrc"
+    set backupdir=s:xdg_cache_home/vim,~/,/tmp
+    set runtimepath=s:xdg_config_home/vim,$VIM,$VIMRUNTIME,$VIM/vimfiles
+    set viminfo+=ns:xdg_cache_home/vim/viminfo
+    let $MYVIMRC="s:xdg_config_home/vim/vimrc"
     let g:setted_environment = 1
 endif
 " }}} Environment
@@ -407,13 +417,13 @@ let g:pymode_virtualenv = 1
 " {{{ vim-sessions
 let g:session_autosave=1
 let g:session_autoload=0
-let g:session_directory=expand("$XDG_CONFIG_HOME/vim/sessions")
+let g:session_directory=expand("s:xdg_config_home/vim/sessions")
 set sessionoptions-=resize
 " }}} vim-sessions
 " {{{ snipMate
 let g:snips_author='Martin Leopold Ortbauer'
 let g:snips_trigger_key='<F1>'
-let g:snippets_dir="$XDG_CONFIG_HOME/vim/bundle/snipmate-snippets,$XDG_CONFIG_HOME/vim/snippets"
+let g:snippets_dir="s:xdg_config_home/vim/bundle/snipmate-snippets,s:xdg_config_home/vim/snippets"
 " }}} snipMate
 " {{{ LanguageTool 
 " use the aur package, since it is patched for the LanguageTool package of
@@ -502,7 +512,7 @@ if has('autocmd')
    " reload vimrc
    "autocmd BufWritePost vimrc source $MYVIMRC
    " skeletons for new files
-   autocmd! BufNewFile * silent! 0r $XDG_CONFIG_HOME/vim/skel/tmpl.%:e
+   autocmd! BufNewFile * silent! 0r s:xdg_config_home/vim/skel/tmpl.%:e
    " http://onethingwell.org/post/1591226959/autocomplete-words-in-vim
    autocmd! FileType rst set complete+=k/usr/share/dict/usa
 endif
