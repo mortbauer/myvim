@@ -1,0 +1,1 @@
+/data/devel/python/rstscript/rstscript-git/additional/lit.vim

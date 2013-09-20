@@ -1,0 +1,108 @@
+% {{{ Preample
+\documentclass[%
+  a4paper,
+  naustrian,
+  oneside,
+  chapterprefix,
+  11pt
+]{article}
+
+\def\mtitle{PDF}
+\def\msubject{PDF}
+\def\mauthor{Martin Ortbauer}
+
+\usepackage[a4paper,tmargin=2cm,bmargin=0cm,includeheadfoot]{geometry}
+
+% manipulate footer
+% \usepackage{scrpage2}
+% \pagestyle{scrheadings}
+\usepackage{fancyhdr,showexpl}
+\pagestyle{fancy}
+\usepackage{fp-eval}
+
+% enable special PostScript fonts
+\usepackage{pifont}
+
+%\usepackage[toc,xindy,acronym]{glossaries}
+%\makeglossaries
+
+\usepackage{caption}
+
+%to use the subfigures
+%\usepackage{subfigure}
+
+% show program code\ldots
+\usepackage{verbatim}
+
+%\usepackage{multirow}
+
+%% make fancy math
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+
+%% create an index
+% \usepackage{makeidx}
+
+%% load german babel package for german abstract
+\usepackage[ngerman]{babel}
+
+% use german characters as well
+\usepackage[utf8x]{inputenc} 
+\usepackage[T1]{fontenc} 
+
+% graphix
+%\usepackage[pdftex]{graphicx}
+%\DeclareGraphicsExtensions{.jpg,.JPG,.png,.pdf,.eps}
+%\graphicspath{{figures/}} 
+ 
+%% use colors
+\usepackage[dvipsnames,usenames]{xcolor}
+
+%% Load float package, for enabling floating extensions
+% \usepackage{subfig}
+ 
+%% allow rotations
+\usepackage{rotating}
+% use version of hyperref
+\usepackage[%
+pdftitle={\mtitle},
+pdfauthor={\mauthor},
+pdfsubject={\msubject},
+colorlinks=true,
+linkcolor=CadetBlue,
+citecolor=red,
+anchorcolor=red,
+urlcolor=red,
+bookmarks=true,
+bookmarksopen=true,
+bookmarksopenlevel=0,
+plainpages=false,
+bookmarksnumbered=true,
+hyperindex=true,
+pdfstartview=2]{hyperref}
+
+\usepackage[all]{hypcap} % fix the label of figures and tables
+
+%% Fancy chapters
+%\usepackage[Lenny]{fncychap}
+%\usepackage[Glenn]{fncychap}
+%\usepackage[Bjarne]{fncychap}
+%\usepackage[avantgarde]{quotchap}
+
+%% Bibliographie
+\usepackage[numbers]{natbib}
+\bibliographystyle{natdin}
+
+%% Code Umgebung
+\usepackage{minted} 
+\usepackage{subfig}
+
+% \usepackage[nohyperlinks]{acronym}
+\usepackage{acronym}
+\usepackage{pst-pdf,pst-plot,pst-text
+
+% }}} Preample
+\begin{document}
+\title{\mtitle}
+\end{document}

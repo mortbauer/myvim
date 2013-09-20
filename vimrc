@@ -2,6 +2,12 @@
 " vim: set fdm=marker ft=vim:
 
 " {{{ ENVIRONMENT 
+if !exists("$XDG_CONFIG_HOME")
+    XDG_CONFIG_HOME=$HOME/.config
+endif
+if !exists("$XDG_CACHE_HOME")
+    XDG_CONFIG_HOME=$HOME/.cache
+endif
 " Make vim respect the XDG base directory spec.
 " from: http://tlvince.com/vim-respect-xdg
 if !exists("g:setted_environment") || &cp
@@ -12,7 +18,7 @@ if !exists("g:setted_environment") || &cp
         set undofile
     endif
     set backupdir=$XDG_CACHE_HOME/vim,~/,/tmp
-    set runtimepath=$XDG_CONFIG_HOME/vim,$VIM,$VIMRUNTIME
+    set runtimepath=$XDG_CONFIG_HOME/vim,$VIM,$VIMRUNTIME,$VIM/vimfiles
     set viminfo+=n$XDG_CACHE_HOME/vim/viminfo
     let $MYVIMRC="$XDG_CONFIG_HOME/vim/vimrc"
     let g:setted_environment = 1
@@ -51,6 +57,9 @@ set nocompatible               " be iMproved
  Bundle 'majutsushi/tagbar'
  Bundle 'wincent/Command-T'
  Bundle 'erisian/rest_tools'
+ Bundle 'jmcantrell/vim-virtualenv'
+ "Bundle 'nvie/vim-rst-tables'
+ "Bundle 'peterhoeg/vim-qml'
  "Bundle 'rsmenon/vim-mathematica'
  "Bundle 'ivanov/vim-ipython'
  "Bundle 'johndgiese/vipy'
@@ -59,8 +68,8 @@ set nocompatible               " be iMproved
  "Bundle 'Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'}
  " vim-scripts repos
  Bundle 'L9'
- " non github repos
- "Bundle 'git://git.wincent.com/command-t.git'
+ Bundle 'Vicle'
+ "Bundle 'AutomaticLaTexPlugin' 
  " local repos
  Bundle '/data/devel/vim/molokai-transparent/.git', {'sync':'no'}
  Bundle '/data/devel/vim/vim-ipython/.git', {'sync':'no'}
@@ -407,8 +416,9 @@ let g:snips_trigger_key='<F1>'
 let g:snippets_dir="$XDG_CONFIG_HOME/vim/bundle/snipmate-snippets,$XDG_CONFIG_HOME/vim/snippets"
 " }}} snipMate
 " {{{ LanguageTool 
-let g:languagetool_jar="/usr/share/java/languagetool/languagetool-commandline.jar"
-"let g:languagetool_disable_rules="DE_CASE,WHITESPACE_RULE,EN_QUOTES,COMMA_PARENTHESIS_WHITESPACE"    
+" use the aur package, since it is patched for the LanguageTool package of
+" archlinux
+let g:languagetool_disable_rules="DE_CASE,WHITESPACE_RULE,EN_QUOTES,COMMA_PARENTHESIS_WHITESPACE"    
 "}}}
 " {{{ Gundo
 nnoremap <leader>g :GundoToggle<CR>
