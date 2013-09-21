@@ -1,0 +1,21 @@
+\documentclass[12pt]{article}
+\pagestyle{empty}
+\usepackage[utf8x]{inputenc}
+\usepackage{pst-pdf,pst-plot,pst-text}
+\begin{document}
+
+\begin{pspicture}(-2,-1)(8,5)
+ \psaxes[linewidth=1.2pt, labels=none,
+ ticks=none]{->}(0,0)(-0.3,-0.3)(7,4)[$T_{Außen}$,-90][$T_{HVL}$,180]
+ \psline[linewidth=0.8pt,linestyle=solid,linecolor=black](0.5,2.75)(5.5,0.25) 
+ \textcolor{blue}{
+ \rput[tr](-0.4,2){$T_{TWW}$}
+ \rput[tr](-0.4,1){$T_{HRL}$}
+ }
+ }
+\end{pspicture}
+
+\end{document} 
+
+
+% vim: set ft=tex ts=4 sw=4 tw=0 :
