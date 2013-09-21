@@ -3,6 +3,9 @@ setlocal expandtab
 setlocal softtabstop=4
 setlocal shiftwidth=4
 
+" http://onethingwell.org/post/1591226959/autocomplete-words-in-vim
+set complete+=k/usr/share/dict/usa
+
 " Wrap at 80 lines
 setlocal textwidth=79
 

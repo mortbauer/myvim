@@ -3,43 +3,39 @@
 
 " {{{ ENVIRONMENT 
 if !exists("$XDG_CONFIG_HOME")
-    let s:xdg_config_home=$HOME/.config
+    let g:xdg_config_home=$HOME/.config
 else
-    let s:xdg_config_home=$XDG_CONFIG_HOME
+    let g:xdg_config_home=$XDG_CONFIG_HOME
 endif
 if !exists("$XDG_CACHE_HOME")
-    let s:xdg_cache_home=$HOME/.cache
+    let g:xdg_cache_home=$HOME/.cache
 else
-    let s:xdg_cache_home=$XDG_CACHE_HOME
+    let g:xdg_cache_home=$XDG_CACHE_HOME
 endif
 " Make vim respect the XDG base directory spec.
 " from: http://tlvince.com/vim-respect-xdg
 if !exists("g:setted_environment") || &cp
-    if !isdirectory(s:xdg_cache_home . '/vim/swp')
-        call mkdir(s:xdg_cache_home . '/vim/swp', "p")
+    if !isdirectory(g:xdg_cache_home . '/vim/swp')
+        call mkdir(g:xdg_cache_home . '/vim/swp', "p")
     endif
-    if !isdirectory(s:xdg_config_home . '/vim/tmp')
-        call mkdir(s:xdg_config_home . '/vim/tmp', "p")
+    if !isdirectory(g:xdg_cache_home . '/vim/tmp')
+        call mkdir(g:xdg_cache_home . '/vim/tmp', "p")
     endif
-    set directory=s:xdg_cache_home/vim/swp//,~/,/tmp
     if version >= 703
         " Persistent undos
-        set undodir=s:xdg_config_home/vim/tmp,~/,/tmp
+        let &undodir=g:xdg_cache_home . '/vim/tmp'
         set undofile
     endif
-    set backupdir=s:xdg_cache_home/vim,~/,/tmp
-    set runtimepath=s:xdg_config_home/vim,$VIM,$VIMRUNTIME,$VIM/vimfiles
-    set viminfo+=ns:xdg_cache_home/vim/viminfo
-    let $MYVIMRC="s:xdg_config_home/vim/vimrc"
+    let &directory=g:xdg_cache_home . '/vim/swp/'
+    let &backupdir=g:xdg_cache_home . '/vim'
+    execute "set runtimepath=" . g:xdg_config_home .'/vim' . ',' . $VIMRUNTIME . ',' . $VIM . '/vimfiles'
+    execute "set viminfo+=n" . g:xdg_cache_home . '/vim/viminfo'
+    let $MYVIMRC=g:xdg_config_home . "/vim/vimrc"
     let g:setted_environment = 1
 endif
 " }}} Environment
 " Forget about vi and set it first as it modifies future behaviour
 set nocompatible
-" {{{ vim-project
-"let g:project_enable_welcome = 0
-"let g:project_use_nerdtree = 1
-" }}}
 " {{{ Vundle
 set nocompatible               " be iMproved
  filetype off                   " required!
@@ -65,8 +61,10 @@ set nocompatible               " be iMproved
  Bundle 'scrooloose/nerdtree'
  Bundle 'klen/python-mode'
  Bundle 'majutsushi/tagbar'
- Bundle 'wincent/Command-T'
- Bundle 'erisian/rest_tools'
+ "Bundle 'wincent/Command-T'
+ Bundle 'noahfrederick/vim-skeleton'
+ "Bundle 'erisian/rest_tools'
+ "Bundle 'Rykka/riv.vim'
  Bundle 'jmcantrell/vim-virtualenv'
  "Bundle 'nvie/vim-rst-tables'
  "Bundle 'peterhoeg/vim-qml'
@@ -81,8 +79,8 @@ set nocompatible               " be iMproved
  Bundle 'Vicle'
  "Bundle 'AutomaticLaTexPlugin' 
  " local repos
- Bundle '/data/devel/vim/molokai-transparent/.git', {'sync':'no'}
- Bundle '/data/devel/vim/vim-ipython/.git', {'sync':'no'}
+ "Bundle '/data/devel/vim/molokai-transparent/.git', {'sync':'no'}
+ "Bundle '/data/devel/vim/vim-ipython/.git', {'sync':'no'}
  " ...
 
  filetype plugin indent on     " required!
@@ -90,22 +88,12 @@ set nocompatible               " be iMproved
  " see :h vundle for more details or wiki for FAQ
  " NOTE: comments after Bundle command are not allowed..
 " }}}
-"" {{{ vim-project projects
-"call project#rc("/data/devel")
-
-"Project  '~/.config/vim/'               , 'vim'
-"Project  'python/python-libmed/'        , 'libmed'
-"Callback 'libmed'                       , 'LibmedSettings'
-
-"function! LibmedSettings()
-    "setlocal tags+=/data/med3.0.6/include/tags
-"endfunction
-"" }}}
 " {{{ PREFERENCES 
 "TODO
 " vim syntax highlighting is slow for long lines, better disable then be slow
 set synmaxcol=100
 " Enable filetype plugins
+filetype on
 filetype plugin on
 filetype indent on
 " change directory to current file
@@ -190,7 +178,6 @@ set cursorline          " Heighlight the line the cursor is in
 set backspace=indent,eol,start " make backspace work like most other apps
 " }}} PREFERENCES 
 " Visuals {{{
-"
 " Set up gvim, colour schemes and the like.
 
 if has('gui_running')
@@ -211,14 +198,8 @@ else
     set background=dark
     let g:zenburn_old_Visual = 1
     let g:zenburn_alternate_Visual = 1
-    "let g:zenburn_high_Contrast = 1
-    "colorscheme typofree
     "colorscheme zenburn
     colorscheme molokai
-    "let g:Powerline_symbols = 'unicode'
-    "colorscheme ir_black
-    "colorscheme 256-jungle
-    "colorscheme transparent
 endif
 " }}} Visuals
 " Mappings {{{
@@ -417,22 +398,19 @@ let g:pymode_virtualenv = 1
 " {{{ vim-sessions
 let g:session_autosave=1
 let g:session_autoload=0
-let g:session_directory=expand("s:xdg_config_home/vim/sessions")
+let g:session_directory=g:xdg_config_home ."/vim/sessions"
 set sessionoptions-=resize
 " }}} vim-sessions
 " {{{ snipMate
 let g:snips_author='Martin Leopold Ortbauer'
 let g:snips_trigger_key='<F1>'
-let g:snippets_dir="s:xdg_config_home/vim/bundle/snipmate-snippets,s:xdg_config_home/vim/snippets"
+let g:snippets_dir=[g:xdg_config_home . "/vim/bundle/snipmate-snippets" ,g:xdg_config_home . "/vim/snippets"]
 " }}} snipMate
 " {{{ LanguageTool 
 " use the aur package, since it is patched for the LanguageTool package of
 " archlinux
 let g:languagetool_disable_rules="DE_CASE,WHITESPACE_RULE,EN_QUOTES,COMMA_PARENTHESIS_WHITESPACE"    
 "}}}
-" {{{ Gundo
-nnoremap <leader>g :GundoToggle<CR>
-" }}} Gundo
 " {{{ Tagbar
 nnoremap <F7> :TagbarToggle<CR>
 
@@ -470,10 +448,6 @@ if exists(":Tabularize")
 endif
 " }}}1 Tabular
 " {{{ Latex
-"{{{ LatexBox 
-let g:LatexBox_viewer = 'evince'
-let g:LatexBox_latexmk_options = '-pvc'
-"}}} LatexBox
 ""not needed as already provided, probably through LatexBox
 function! PsTricks()
     python << EOF
@@ -489,48 +463,16 @@ EOF
 endfunction
 "noremap <F5> :call PsTricks()<CR>
 "}}} Latex
-" {{{ statline
-let g:statline_mixed_indent = 0
-let g:statline_trailing_space=0
-let g:statline_filename_relative = 1
-let g:statline_fugitive = 1
-let g:statline_syntastic = 1
-"hi link User1 SpellCap
-" }}} statline
-" {{{ Syntastic
-let g:syntastic_mode_map = { 'mode': 'passive'}
-" }}} Syntastic
-" {{{ FuzzyFinder
-nnoremap <silent> <C-f>b     :FufBuffer<CR>
-nnoremap <silent> <C-f>f     :FufFile<CR>
-" }}} FuzzyFinder
+" {{{ skeletons
+let g:skeleton_template_dir=g:xdg_config_home . '/vim/skeletons'
+" }}}
 " Autocommands {{{
 if has('autocmd')
-   "autocmd BufEnter *.m    compiler mlint
-   " restore cursor position
-   "au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
-   " reload vimrc
-   "autocmd BufWritePost vimrc source $MYVIMRC
-   " skeletons for new files
-   autocmd! BufNewFile * silent! 0r s:xdg_config_home/vim/skel/tmpl.%:e
-   " http://onethingwell.org/post/1591226959/autocomplete-words-in-vim
-   autocmd! FileType rst set complete+=k/usr/share/dict/usa
 endif
 " }}} 
-" {{{ Maximize
-noremap <leader>max :call ToggleRolodexTab()<CR>
-" }}} Maximize
-" {{{ RIV
-"let g:riv_ignored_imaps = "<Tab>,<S-Tab>"
-let g:riv_ignored_imaps = "<BS>"
-" }}} RIV
 " {{{ Completion
 "code completion: http://vim.wikia.com/wiki/Omni_completion
 set omnifunc=syntaxcomplete#Complete
-" }}}
-" {{{ powerline
-"set guifont=DejaVu\ Sans\ Mono\ for\ Powerline\ 9
-"set laststatus=2
 " }}}
 " {{{ python settings
 augroup vimrc_autocmds
@@ -540,13 +482,4 @@ augroup vimrc_autocmds
     autocmd FileType python,pyrex match Excess /\%80v.*/
     autocmd FileType python,pyrex set nowrap
 augroup END
-" }}}
-" {{{ Minibufexpl
-"http://blog.dispatched.ch/2009/05/24/vim-as-python-ide/
-"let g:miniBufExplMapWindowNavVim = 1
-"let g:miniBufExplMapWindowNavArrows = 1
-"let g:miniBufExplMapCTabSwitchBufs = 1
-"let g:miniBufExplModSelTarget = 1
-" }}}
-" {{{ completion menu
 " }}}
