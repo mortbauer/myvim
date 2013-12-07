@@ -53,9 +53,12 @@ set nocompatible               " be iMproved
  Bundle 'molokai'
  Bundle 'Zenburn'
  Bundle 'gmarik/ingretu'
+ Bundle 'veselosky/vim-rst'
  " original repos on github
  "Bundle 'amiorin/vim-project'
+ Bundle 'JuliaLang/julia-vim'
  Bundle 'chrisbra/Recover.vim'
+ Bundle 'sjl/gundo.vim'
  "Bundle 'mileszs/ack.vim'
  Bundle 'scrooloose/nerdcommenter'
  Bundle 'tpope/vim-fugitive'
@@ -485,4 +488,8 @@ augroup vimrc_autocmds
     autocmd FileType python,pyrex match Excess /\%80v.*/
     autocmd FileType python,pyrex set nowrap
 augroup END
+" }}}
+" {{{ rst
+" exclude lisp from syntax highlighting in rst files because of issue https://code.google.com/p/vim/issues/detail?id=108&q=rst
+let g:rst_syntax_code_list = ['vim', 'java', 'cpp', 'php', 'python', 'perl']
 " }}}
