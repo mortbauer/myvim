@@ -39,7 +39,7 @@ endif
 set nocompatible               " be iMproved
  filetype off                   " required!
 
- set rtp+=~/.config/vim/vundles/vundle
+ set rtp+=~/.config/vim/Vundle.vim
  call vundle#rc("$HOME/.config/vim/vundles")
 
  " let Vundle manage Vundle
