@@ -3,14 +3,14 @@
 
 " {{{ ENVIRONMENT 
 if !exists("$XDG_CONFIG_HOME")
-    let g:xdg_config_home="$HOME/.config"
+    let g:xdg_config_home=$HOME.'/.config'
 else
-    let g:xdg_config_home="$XDG_CONFIG_HOME"
+    let g:xdg_config_home=$XDG_CONFIG_HOME
 endif
 if !exists("$XDG_CACHE_HOME")
-    let g:xdg_cache_home="$HOME/.cache"
+    let g:xdg_cache_home=$HOME.'/.cache'
 else
-    let g:xdg_cache_home="$XDG_CACHE_HOME"
+    let g:xdg_cache_home=$XDG_CACHE_HOME
 endif
 " Make vim respect the XDG base directory spec.
 " from: http://tlvince.com/vim-respect-xdg
