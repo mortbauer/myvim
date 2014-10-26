@@ -69,7 +69,7 @@ set nocompatible               " be iMproved
  Bundle 'drmikehenry/vim-fontsize'
  "Bundle 'mileszs/ack.vim'
  Bundle 'scrooloose/nerdcommenter'
- Bundle 'tpope/vim-fugitive'
+ "Bundle 'tpope/vim-fugitive'
  Bundle 'scrooloose/nerdtree'
  Bundle 'klen/python-mode'
  Bundle 'majutsushi/tagbar'
@@ -92,10 +92,12 @@ set nocompatible               " be iMproved
  Bundle 'jeetsukumaran/vim-buffergator'
  "Bundle 'techlivezheng/vim-plugin-minibufexpl'
  "Bundle 'bling/vim-bufferline'
+ "Bundle 'fholgado/minibufexpl.vim'
+ "Bundle 'jeetsukumaran/vim-buffergator'
  "Bundle 'Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'}
  " vim-scripts repos
- Bundle 'L9'
- Bundle 'Vicle'
+ "Bundle 'L9'
+ "Bundle 'Vicle'
  "Bundle 'AutomaticLaTexPlugin' 
  " local repos
  "Bundle '/data/devel/vim/molokai-transparent/.git', {'sync':'no'}
