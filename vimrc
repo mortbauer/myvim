@@ -34,13 +34,12 @@ if !exists("g:setted_environment") || &cp
     let g:setted_environment = 1
 endif
 " }}} Environment
-" Forget about vi and set it first as it modifies future behaviour
-set nocompatible
 " {{{ Vundle
+" Forget about vi and set it first as it modifies future behaviour
 set nocompatible               " be iMproved
  filetype off                   " required!
 
- set rtp+=~/.config/vim/vundle/
+ set rtp+=~/.config/vim/vundles/vundle
  call vundle#rc("$HOME/.config/vim/vundles")
 
  " let Vundle manage Vundle
@@ -54,11 +53,20 @@ set nocompatible               " be iMproved
  Bundle 'Zenburn'
  Bundle 'gmarik/ingretu'
  Bundle 'veselosky/vim-rst'
+ Bundle 'endel/vim-github-colorscheme'
+ Bundle 'summerfruit256.vim'
+ "Bundle 'LanguageTool'
  " original repos on github
  "Bundle 'amiorin/vim-project'
+ "Bundle 'vim-scripts/TabBar'
+ Bundle 'tmhedberg/SimpylFold'
+ Bundle 'rking/ag.vim'
+ Bundle 'shor-ty/vimExtensionOF'
+ Bundle 'dimasg/vim-mark'
  Bundle 'JuliaLang/julia-vim'
  Bundle 'chrisbra/Recover.vim'
  Bundle 'sjl/gundo.vim'
+ Bundle 'drmikehenry/vim-fontsize'
  "Bundle 'mileszs/ack.vim'
  Bundle 'scrooloose/nerdcommenter'
  Bundle 'tpope/vim-fugitive'
@@ -67,6 +75,8 @@ set nocompatible               " be iMproved
  Bundle 'majutsushi/tagbar'
  Bundle 'tshirtman/vim-cython'
  Bundle 'jcf/vim-latex'
+ Bundle 'mustache/vim-mustache-handlebars'
+ Bundle 'Valloric/MatchTagAlways'
  "Bundle 'wincent/Command-T'
  Bundle 'noahfrederick/vim-skeleton'
  "Bundle 'erisian/rest_tools'
@@ -74,11 +84,14 @@ set nocompatible               " be iMproved
  Bundle 'jmcantrell/vim-virtualenv'
  "Bundle 'nvie/vim-rst-tables'
  Bundle 'peterhoeg/vim-qml'
+ Bundle 'saltstack/salt-vim'
+ Plugin 'bling/vim-airline'
  "Bundle 'rsmenon/vim-mathematica'
  "Bundle 'ivanov/vim-ipython'
  "Bundle 'johndgiese/vipy'
- "Bundle 'fholgado/minibufexpl.vim'
  Bundle 'jeetsukumaran/vim-buffergator'
+ "Bundle 'techlivezheng/vim-plugin-minibufexpl'
+ "Bundle 'bling/vim-bufferline'
  "Bundle 'Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'}
  " vim-scripts repos
  Bundle 'L9'
@@ -95,9 +108,15 @@ set nocompatible               " be iMproved
  " NOTE: comments after Bundle command are not allowed..
 " }}}
 " {{{ PREFERENCES 
-"TODO
+" stop vim from changing buffer position when switching buffers, 
+" http://stackoverflow.com/a/4255960/1607448
+    " doesn't seem to be what i want from it
+    "if v:version >= 700
+      "au BufLeave * let b:winview = winsaveview()
+      "au BufEnter * if(exists('b:winview')) | call winrestview(b:winview) | endif
+    "endif
 " vim syntax highlighting is slow for long lines, better disable then be slow
-set synmaxcol=100
+set synmaxcol=150
 " Enable filetype plugins
 filetype on
 filetype plugin on
@@ -105,6 +124,7 @@ filetype indent on
 " change directory to current file
 set autochdir
 "set ttymouse=urxvt " messes up vim inside screen
+set mouse=a
 " for correct colors with gnu screen
 set t_Co=256
 " Statusline Format
@@ -125,12 +145,12 @@ if $STY != "" && !has('gui')
 endif
 
 " use folding if we can
-if has ('folding')
-  set foldenable
-  set foldmethod=marker
-  set foldmarker={{{,}}}
-  set foldcolumn=0
-endif
+"if has ('folding')
+  "set foldenable
+  "set foldmethod=marker
+  "set foldmarker={{{,}}}
+  "set foldcolumn=0
+"endif
 
 " utf-8
 if has('multi_byte')
@@ -162,7 +182,7 @@ set showmatch           " ... results
 set hlsearch            " ... as you type
 
 " Wrapping
-"set textwidth=70        " Hard-wrap text at nth column
+"set textwidth=90        " Hard-wrap text at nth column
 set wrap                " Wrap long lines
 
 " General
@@ -177,20 +197,18 @@ set scrolloff=3         " 3 lines of context
 set number              " Show line numbers
 set undolevels=1000     " Increase number of possible undos.
 set wildmode=list:longest,full " Complete to longest  string (list:longest) and then complete all full matches after another (full). Thanks to pbrisbin (http://pbrisbin.com:8080/dotfiles/vimrc).
-set mouse=a
 set backspace=indent,eol,start          " Allow backspacing on the given values
 set laststatus=2
 set cursorline          " Heighlight the line the cursor is in
-set backspace=indent,eol,start " make backspace work like most other apps
 " }}} PREFERENCES 
 " Visuals {{{
 " Set up gvim, colour schemes and the like.
 
 if has('gui_running')
     if has('win32') || has('win64')
-       set guifont=DejaVu_Sans_Mono:h8,Consolas:h8,Courier_New:h8
+       set guifont=DejaVu_Sans_Mono:h10,Consolas:h10,Courier_New:h10
     else
-       set guifont=Monospace\ 10                " Fallback to system default
+       set guifont=Monospace\ 12                " Fallback to system default
     endif
     set guioptions-=T                       " Hide toolbar
     set guioptions-=m                       " Hide menu bar
@@ -200,6 +218,7 @@ if has('gui_running')
     set stal=0                              " don't show tabline
     set background=dark
     colorscheme molokai
+    set lines=80 columns=80
 else
     set background=dark
     let g:zenburn_old_Visual = 1
@@ -213,7 +232,7 @@ endif
 " Map leader (the dedicated user-mapping prefix key) to comma
 let mapleader = ","
 
-" mximize current window
+" maximize current window
 map <F5> <C-W>_<C-W><Bar>
 " vim does funny things with inline comments here, so don't use them.
 
@@ -231,7 +250,7 @@ map <F8> o<Esc>
 map <F9> O<Esc>
 
 " Replace the word under the cursor ,
-nnoremap <leader>r :%s/\<<C-r><C-w>\>/
+nnoremap <leader>R :%s/\<<C-r><C-w>\>/
 
 " M to show marks
 noremap M :marks<CR>
@@ -293,8 +312,10 @@ nnoremap <F1> <ESC>
 vnoremap <F1> <ESC>
 " }}} Disabled keys 
 " {{{ NERDTree
-nnoremap <F2> :NERDTreeToggle<CR>
-let NERDTreeIgnore=['.vim$', '\~$', '.*\.pyc$', 'pip-log\.txt$']
+nnoremap <F2> :NERDTreeToggle <CR>
+nnoremap <F1> :NERDTree .<CR>
+let NERDTreeChDirMode=2
+let NERDTreeIgnore=['.vim$', '\~$', '.*\.pyc$', 'pip-log\.txt$', '.lo$','.mod$']
 " }}} NERDTree
 " {{{ python-mode
 " TODO, this plugin is responsible for slow vim startup, should be loaded
@@ -398,7 +419,7 @@ let g:pymode_run_key = '<F5>'
 let g:pymode_motion = 0
 " }}}
 " {{{ virtualenv
-let g:pymode_virtualenv = 1
+let g:pymode_virtualenv = 0
 " }}}
 " }}}
 " {{{ vim-sessions
@@ -415,6 +436,7 @@ let g:snippets_dir=[g:xdg_config_home . "/vim/bundle/snipmate-snippets" ,g:xdg_c
 " {{{ LanguageTool 
 " use the aur package, since it is patched for the LanguageTool package of
 " archlinux
+"let g:languagetool_jar="/usr/share/java/languagetool/languagetool-commandline.jar"
 let g:languagetool_disable_rules="DE_CASE,WHITESPACE_RULE,EN_QUOTES,COMMA_PARENTHESIS_WHITESPACE"    
 "}}}
 " {{{ Tagbar
@@ -436,12 +458,6 @@ let g:tagbar_type_vb = {
     \ ]
 \ }
 " }}} Tagbar
-"{{{ Tasklist
-nnoremap <leader>v <Plug>TaskList
-"}}} Tasklist
-"{{{ MakeGreen
-nnoremap <Leader>] <Plug>MakeGreen
-"}}} MakeGreen
 " {{{  Google Translater 
 "noremap <C-T> v /_$\\|"/e-1<CR>d:call Translate("fin","en")<CR>:noh<CR>
 " }}}  Google Translater 
@@ -478,18 +494,31 @@ endif
 " }}} 
 " {{{ Completion
 "code completion: http://vim.wikia.com/wiki/Omni_completion
-set omnifunc=syntaxcomplete#Complete
+"set omnifunc=syntaxcomplete#Complete
 " }}}
 " {{{ python settings
-augroup vimrc_autocmds
-    autocmd!
-    " highlight characters past column 120
-    autocmd FileType python,pyrex highlight Excess ctermbg=DarkGrey guibg=Black
-    autocmd FileType python,pyrex match Excess /\%80v.*/
-    autocmd FileType python,pyrex set nowrap
-augroup END
+"augroup vimrc_autocmds
+    "autocmd!
+    "" highlight characters past column 120
+    "autocmd FileType python,pyrex highlight Excess ctermbg=DarkGrey guibg=Black
+    "autocmd FileType python,pyrex match Excess /\%80v.*/
+    "autocmd FileType python,pyrex set nowrap
+"augroup END
 " }}}
 " {{{ rst
 " exclude lisp from syntax highlighting in rst files because of issue https://code.google.com/p/vim/issues/detail?id=108&q=rst
 let g:rst_syntax_code_list = ['vim', 'java', 'cpp', 'php', 'python', 'perl']
+" }}}
+" {{{ SimpylFold
+" aslo fold away cython funcs
+let s:def_regex = '^\s*\%(class\|def\|cdef\|cpdef\) \w\+'
+" }}}
+" {{{ MatchTag
+let g:mta_filetypes = {
+    \ 'html' : 1,
+    \ 'html.handlebars' : 1,
+    \ 'xhtml' : 1,
+    \ 'xml' : 1,
+    \ 'jinja' : 1,
+    \}
 " }}}
