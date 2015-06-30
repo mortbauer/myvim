@@ -39,75 +39,88 @@ endif
 set nocompatible               " be iMproved
  filetype off                   " required!
 
- set rtp+=~/.config/vim/Vundle.vim
- call vundle#rc("$HOME/.config/vim/vundles")
+ "set rtp+=~/.config/vim/Vundle.vim
+ "call vundle#rc("$HOME/.config/vim/vundles")
+ call plug#begin('$HOME/.config/vim/plugged')
 
  " let Vundle manage Vundle
  " required! 
- Bundle 'gmarik/vundle'
+ Plug 'gmarik/vundle'
 
  " My Bundles here:
  "
  " colorschemes
- Bundle 'molokai'
- Bundle 'Zenburn'
- Bundle 'gmarik/ingretu'
- Bundle 'veselosky/vim-rst'
- Bundle 'endel/vim-github-colorscheme'
- Bundle 'summerfruit256.vim'
- "Bundle 'LanguageTool'
+ Plug 'SpellCheck'
+ Plug 'molokai'
+ Plug 'Zenburn'
+ Plug 'gmarik/ingretu'
+ Plug 'veselosky/vim-rst'
+ Plug 'endel/vim-github-colorscheme'
+ Plug 'summerfruit256.vim'
+ Plug 'ingo-library'
+ "Plug 'coot/atp_vim'
+ " use the aur package since it is patched for the used languagetool version
+ "Plug 'LanguageTool'
  " original repos on github
- "Bundle 'amiorin/vim-project'
- "Bundle 'vim-scripts/TabBar'
- Bundle 'tmhedberg/SimpylFold'
- Bundle 'rking/ag.vim'
- Bundle 'shor-ty/vimExtensionOF'
- Bundle 'dimasg/vim-mark'
- Bundle 'JuliaLang/julia-vim'
- Bundle 'chrisbra/Recover.vim'
- Bundle 'sjl/gundo.vim'
- Bundle 'drmikehenry/vim-fontsize'
- "Bundle 'mileszs/ack.vim'
- Bundle 'scrooloose/nerdcommenter'
- "Bundle 'tpope/vim-fugitive'
- Bundle 'scrooloose/nerdtree'
- Bundle 'klen/python-mode'
- Bundle 'majutsushi/tagbar'
- Bundle 'tshirtman/vim-cython'
- Bundle 'jcf/vim-latex'
- Bundle 'mustache/vim-mustache-handlebars'
- Bundle 'Valloric/MatchTagAlways'
- "Bundle 'wincent/Command-T'
- Bundle 'noahfrederick/vim-skeleton'
- "Bundle 'erisian/rest_tools'
- "Bundle 'Rykka/riv.vim'
- Bundle 'jmcantrell/vim-virtualenv'
- "Bundle 'nvie/vim-rst-tables'
- Bundle 'peterhoeg/vim-qml'
- Bundle 'saltstack/salt-vim'
- Plugin 'bling/vim-airline'
- "Bundle 'rsmenon/vim-mathematica'
- "Bundle 'ivanov/vim-ipython'
- "Bundle 'johndgiese/vipy'
- Bundle 'jeetsukumaran/vim-buffergator'
- "Bundle 'techlivezheng/vim-plugin-minibufexpl'
- "Bundle 'bling/vim-bufferline'
- "Bundle 'fholgado/minibufexpl.vim'
- "Bundle 'jeetsukumaran/vim-buffergator'
- "Bundle 'Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'}
+ "Plug 'amiorin/vim-project'
+ "Plug 'vim-scripts/TabBar'
+ Plug 'tmhedberg/SimpylFold'
+ Plug 'rking/ag.vim'
+ Plug 'effi/vim-OpenFoam-syntax'
+ Plug 'dimasg/vim-mark'
+ Plug 'JuliaLang/julia-vim'
+ Plug 'chrisbra/Recover.vim'
+ Plug 'sjl/gundo.vim'
+ Plug 'drmikehenry/vim-fontsize'
+ "Plug 'mileszs/ack.vim'
+ Plug 'scrooloose/nerdcommenter'
+ "Plug 'tpope/vim-fugitive'
+ Plug 'editorconfig/editorconfig-vim'
+ Plug 'scrooloose/nerdtree'
+ Plug 'klen/python-mode'
+ Plug 'majutsushi/tagbar'
+ Plug 'tshirtman/vim-cython'
+ Plug 'lervag/vim-latex'
+ Plug 'mustache/vim-mustache-handlebars'
+ Plug 'kchmck/vim-coffee-script'
+ Plug 'Valloric/MatchTagAlways'
+ Plug 'digitaltoad/vim-jade'
+ "Plug 'wincent/Command-T'
+ Plug 'noahfrederick/vim-skeleton'
+ "Plug 'erisian/rest_tools'
+ "Plug 'Rykka/riv.vim'
+ Plug 'jmcantrell/vim-virtualenv'
+ "Plug 'nvie/vim-rst-tables'
+ Plug 'peterhoeg/vim-qml'
+ Plug 'saltstack/salt-vim'
+ Plug 'bling/vim-airline'
+ "Plug 'mkitt/tabline.vim'
+ "Plug 'rsmenon/vim-mathematica'
+ "Plug 'ivanov/vim-ipython'
+ "Plug 'johndgiese/vipy'
+ "Plug 'jeetsukumaran/vim-buffergator'
+ "Plug 'techlivezheng/vim-plugin-minibufexpl'
+ "Plug 'bling/vim-bufferline'
+ "Plug 'fholgado/minibufexpl.vim'
+ "Plug 'jeetsukumaran/vim-buffergator'
+ "Plug 'Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'}
  " vim-scripts repos
- "Bundle 'L9'
- "Bundle 'Vicle'
- "Bundle 'AutomaticLaTexPlugin' 
+ "Plug 'L9'
+ "Plug 'Vicle'
+ "Plug 'AutomaticLaTexPlugin' 
  " local repos
- "Bundle '/data/devel/vim/molokai-transparent/.git', {'sync':'no'}
- "Bundle '/data/devel/vim/vim-ipython/.git', {'sync':'no'}
+ "Plug '/data/devel/vim/molokai-transparent/.git', {'sync':'no'}
+ "Plug '/data/devel/vim/vim-ipython/.git', {'sync':'no'}
+ " session managment
+ Plug 'xolox/vim-misc'
+ Plug 'xolox/vim-session'
  " ...
+ call plug#end()
 
  filetype plugin indent on     " required!
  "
  " see :h vundle for more details or wiki for FAQ
- " NOTE: comments after Bundle command are not allowed..
+ " NOTE: comments after Plug command are not allowed..
 " }}}
 " {{{ PREFERENCES 
 " stop vim from changing buffer position when switching buffers, 
@@ -124,13 +137,13 @@ filetype on
 filetype plugin on
 filetype indent on
 " change directory to current file
-set autochdir
+"set autochdir
 "set ttymouse=urxvt " messes up vim inside screen
 set mouse=a
 " for correct colors with gnu screen
 set t_Co=256
 " Statusline Format
-set statusline=%<%F%h%m%r%h%w%y\ %{strftime(\"%d/%m/%Y-%H:%M\")}%=\ col:%c%V\ pos:%o\ lin:%l\,%L\ %P
+"set statusline=%<%F%h%m%r%h%w%y\ %{strftime(\"%d/%m/%Y-%H:%M\")}%=\ col:%c%V\ pos:%o\ lin:%l\,%L\ %P
 
 " doesn't discard changes when switching buffers, simply hides the buffer
 set hidden
@@ -233,13 +246,14 @@ endif
 "
 " Map leader (the dedicated user-mapping prefix key) to comma
 let mapleader = ","
+let maplocalleader = "-"
 
 " maximize current window
 map <F5> <C-W>_<C-W><Bar>
 " vim does funny things with inline comments here, so don't use them.
 
 " Toggle spelling and show it' status
-nnoremap <F3> :setlocal spell! spell?<CR>
+"nnoremap <F3> :setlocal spell! spell?<CR>
 
 " map <M-a> to list the buffers, entering a number + <CR> will close the list
 nnoremap bb :buffers<CR>:buffer<Space>
@@ -265,6 +279,8 @@ map <leader>ew :e %%
 map <leader>es :sp %%
 map <leader>ev :vsp %%
 map <leader>et :tabe %%
+
+map <leader>t :tabnext<CR>
 
 " Return to normal mode
 inoremap jj <ESC>
@@ -439,7 +455,7 @@ let g:snippets_dir=[g:xdg_config_home . "/vim/bundle/snipmate-snippets" ,g:xdg_c
 " use the aur package, since it is patched for the LanguageTool package of
 " archlinux
 "let g:languagetool_jar="/usr/share/java/languagetool/languagetool-commandline.jar"
-let g:languagetool_disable_rules="DE_CASE,WHITESPACE_RULE,EN_QUOTES,COMMA_PARENTHESIS_WHITESPACE"    
+let g:languagetool_disable_rules="EN_UNPAIRED_BRACKETS,CURRENCY,CURRENCY_SPACE,MORFOLOGIK_RULE_EN_US,DE_CASE,WHITESPACE_RULE,EN_QUOTES,COMMA_PARENTHESIS_WHITESPACE"    
 "}}}
 " {{{ Tagbar
 nnoremap <F7> :TagbarToggle<CR>
@@ -487,6 +503,9 @@ EOF
 endfunction
 "noremap <F5> :call PsTricks()<CR>
 "}}} Latex
+"{{{ atp seems a good latex suite
+let g:atp_folding=1
+"}}}
 " {{{ skeletons
 let g:skeleton_template_dir=g:xdg_config_home . '/vim/skeletons'
 " }}}
@@ -523,4 +542,12 @@ let g:mta_filetypes = {
     \ 'xml' : 1,
     \ 'jinja' : 1,
     \}
+" }}}
+" {{{ session
+let g:session_autosave= 'no'
+" }}}
+" {{{ Nerdcommenter
+let g:NERDCustomDelimiters = {
+        \ 'cython': { 'left': '# ', 'right': '' }
+    \ }
 " }}}
