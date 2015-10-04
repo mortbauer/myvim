@@ -185,7 +185,7 @@ set cursorline          " Heighlight the line the cursor is in
 
 if has('gui_running')
     if has('win32') || has('win64')
-       set guifont=DejaVu_Sans_Mono:h10,Consolas:h10,Courier_New:h10
+       set guifont=DejaVu_Sans_Mono:h12,Consolas:h12,Courier_New:h12
     else
        set guifont=Monospace\ 12                " Fallback to system default
     endif
