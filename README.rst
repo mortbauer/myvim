@@ -9,13 +9,16 @@ My personal vim settings, to use it there need to be done two things:
   
   This actually just sets the place for the vim settings
   
-2. clone this repo to the path you just specified, in the above cas eone would do::
+2. clone this repo to the path you just specified, in the above case one would do::
 
   cd $XDG_CONFIG_HOME
-  git clone --recursive https://github.com/mortbauer/myvim vim
+  git clone --recursive https://github.com/mortbauer/myvim $XDG_CONFIG_HOME/vim
   
 The first time you open vim with the new settings, you need to open a new shell 
 otherwise the VIMINIT you just specified won't be used and then you need to type into vim::
 
-  :BundleInstall
+  :PlugInstall
+
+On windows the stuff works a bit different, here the vimrc file has to be
+copied to `$HOME\_vimrc`.
 

@@ -28,7 +28,7 @@ if !exists("g:setted_environment") || &cp
     endif
     let &directory=g:xdg_cache_home . '/vim/swp/'
     let &backupdir=g:xdg_cache_home . '/vim'
-    execute "set runtimepath=" . g:xdg_config_home .'/vim' . ',' . $VIMRUNTIME . ',' . $VIM . '/vimfiles'
+    let &runtimepath=g:xdg_config_home .'/vim' . ',' . $VIMRUNTIME . ',' . $VIM . '/vimfiles'
     execute "set viminfo+=n" . g:xdg_cache_home . '/vim/viminfo'
     let $MYVIMRC=g:xdg_config_home . "/vim/vimrc"
     let g:setted_environment = 1
@@ -36,34 +36,21 @@ endif
 " }}} Environment
 " {{{ Vundle
 " Forget about vi and set it first as it modifies future behaviour
-set nocompatible               " be iMproved
+ set nocompatible               " be iMproved
  filetype off                   " required!
-
- "set rtp+=~/.config/vim/Vundle.vim
- "call vundle#rc("$HOME/.config/vim/vundles")
  call plug#begin('$HOME/.config/vim/plugged')
-
- " let Vundle manage Vundle
- " required! 
- Plug 'gmarik/vundle'
-
  " My Bundles here:
- "
  " colorschemes
- Plug 'SpellCheck'
  Plug 'molokai'
  Plug 'Zenburn'
  Plug 'gmarik/ingretu'
- Plug 'veselosky/vim-rst'
  Plug 'endel/vim-github-colorscheme'
  Plug 'summerfruit256.vim'
  Plug 'ingo-library'
- "Plug 'coot/atp_vim'
  " use the aur package since it is patched for the used languagetool version
  "Plug 'LanguageTool'
- " original repos on github
- "Plug 'amiorin/vim-project'
- "Plug 'vim-scripts/TabBar'
+ Plug 'veselosky/vim-rst'
+ Plug 'SpellCheck'
  Plug 'tmhedberg/SimpylFold'
  Plug 'rking/ag.vim'
  Plug 'effi/vim-OpenFoam-syntax'
@@ -72,9 +59,7 @@ set nocompatible               " be iMproved
  Plug 'chrisbra/Recover.vim'
  Plug 'sjl/gundo.vim'
  Plug 'drmikehenry/vim-fontsize'
- "Plug 'mileszs/ack.vim'
  Plug 'scrooloose/nerdcommenter'
- "Plug 'tpope/vim-fugitive'
  Plug 'editorconfig/editorconfig-vim'
  Plug 'scrooloose/nerdtree'
  Plug 'klen/python-mode'
@@ -85,41 +70,20 @@ set nocompatible               " be iMproved
  Plug 'kchmck/vim-coffee-script'
  Plug 'Valloric/MatchTagAlways'
  Plug 'digitaltoad/vim-jade'
- "Plug 'wincent/Command-T'
  Plug 'noahfrederick/vim-skeleton'
- "Plug 'erisian/rest_tools'
- "Plug 'Rykka/riv.vim'
  Plug 'jmcantrell/vim-virtualenv'
- "Plug 'nvie/vim-rst-tables'
  Plug 'peterhoeg/vim-qml'
  Plug 'saltstack/salt-vim'
  Plug 'bling/vim-airline'
- "Plug 'mkitt/tabline.vim'
- "Plug 'rsmenon/vim-mathematica'
- "Plug 'ivanov/vim-ipython'
- "Plug 'johndgiese/vipy'
- "Plug 'jeetsukumaran/vim-buffergator'
- "Plug 'techlivezheng/vim-plugin-minibufexpl'
- "Plug 'bling/vim-bufferline'
- "Plug 'fholgado/minibufexpl.vim'
- "Plug 'jeetsukumaran/vim-buffergator'
- "Plug 'Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'}
- " vim-scripts repos
- "Plug 'L9'
- "Plug 'Vicle'
- "Plug 'AutomaticLaTexPlugin' 
  " local repos
  "Plug '/data/devel/vim/molokai-transparent/.git', {'sync':'no'}
  "Plug '/data/devel/vim/vim-ipython/.git', {'sync':'no'}
  " session managment
  Plug 'xolox/vim-misc'
  Plug 'xolox/vim-session'
- " ...
  call plug#end()
 
  filetype plugin indent on     " required!
- "
- " see :h vundle for more details or wiki for FAQ
  " NOTE: comments after Plug command are not allowed..
 " }}}
 " {{{ PREFERENCES 
