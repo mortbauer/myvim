@@ -30,7 +30,6 @@ if !exists("g:setted_environment") || &cp
     let &backupdir=g:xdg_cache_home . '/vim'
     let &runtimepath=g:xdg_config_home .'/vim' . ',' . $VIMRUNTIME . ',' . $VIM . '/vimfiles'
     execute "set viminfo+=n" . g:xdg_cache_home . '/vim/viminfo'
-    let $MYVIMRC=g:xdg_config_home . "/vim/vimrc"
     let g:setted_environment = 1
 endif
 " }}} Environment
@@ -50,6 +49,7 @@ endif
  " use the aur package since it is patched for the used languagetool version
  "Plug 'LanguageTool'
  Plug 'veselosky/vim-rst'
+ Plug 'drmikehenry/vim-extline'
  Plug 'SpellCheck'
  Plug 'tmhedberg/SimpylFold'
  Plug 'rking/ag.vim'
@@ -493,6 +493,7 @@ endif
 " {{{ rst
 " exclude lisp from syntax highlighting in rst files because of issue https://code.google.com/p/vim/issues/detail?id=108&q=rst
 let g:rst_syntax_code_list = ['vim', 'java', 'cpp', 'php', 'python', 'perl']
+" use vim-extline instead
 " }}}
 " {{{ SimpylFold
 " aslo fold away cython funcs
