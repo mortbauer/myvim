@@ -7,7 +7,10 @@ My personal vim settings, to use it there need to be done two things:
 
   export VIMINIT='let $MYVIMRC="$XDG_CONFIG_HOME/vim/vimrc" | source $MYVIMRC'
   
-  This actually just sets the place for the vim settings
+This actually just sets the place for the vim settings, or just create a
+symlink which also works under windows::
+
+  ln -sf ~/.config/vim/vimrc ~/_vimrc
   
 2. clone this repo to the path you just specified, in the above case one would do::
 
@@ -18,7 +21,3 @@ The first time you open vim with the new settings, you need to open a new shell
 otherwise the VIMINIT you just specified won't be used and then you need to type into vim::
 
   :PlugInstall
-
-On windows the stuff works a bit different, here the vimrc file has to be
-copied to `$HOME\_vimrc`.
-
