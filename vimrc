@@ -21,16 +21,18 @@ if !exists("g:setted_environment") || &cp
     if !isdirectory(g:xdg_cache_home . '/vim/tmp')
         call mkdir(g:xdg_cache_home . '/vim/tmp', "p")
     endif
+    if !isdirectory(g:xdg_cache_home . '/vim/backup')
+        call mkdir(g:xdg_cache_home . '/vim/backup', "p")
+    endif
     if version >= 703
         " Persistent undos
-        let &undodir=g:xdg_cache_home . '/vim/tmp'
+        let &undodir=g:xdg_cache_home . '/vim/tmp//'
         set undofile
     endif
-    let &directory=g:xdg_cache_home . '/vim/swp/'
-    let &backupdir=g:xdg_cache_home . '/vim'
+    let &directory=g:xdg_cache_home . '/vim/swp//'
+    let &backupdir=g:xdg_cache_home . '/vim/backup//'
     let &runtimepath=g:xdg_config_home .'/vim' . ',' . $VIMRUNTIME . ',' . $VIM . '/vimfiles'
     execute "set viminfo+=n" . g:xdg_cache_home . '/vim/viminfo'
-    let $MYVIMRC=g:xdg_config_home . "/vim/vimrc"
     let g:setted_environment = 1
 endif
 " }}} Environment
@@ -47,14 +49,17 @@ endif
  Plug 'endel/vim-github-colorscheme'
  Plug 'summerfruit256.vim'
  Plug 'ingo-library'
- Plug 'scrooloose/syntastic'
  " use the aur package since it is patched for the used languagetool version
  "Plug 'LanguageTool'
  Plug 'tpope/vim-fugitive'
+ "Plug 'cjrh/vim-conda'
+ Plug 'gabrielelana/vim-markdown'
  Plug 'mxw/vim-jsx'
  Plug 'pangloss/vim-javascript'
  Plug 'veselosky/vim-rst'
+ Plug 'drmikehenry/vim-extline'
  Plug 'SpellCheck'
+ Plug 'tpope/vim-fugitive'
  Plug 'tmhedberg/SimpylFold'
  Plug 'rking/ag.vim'
  Plug 'effi/vim-OpenFoam-syntax'
@@ -68,11 +73,13 @@ endif
  Plug 'scrooloose/nerdtree'
  "Plug 'klen/python-mode'
  Plug 'hdima/python-syntax'
+ "Plug 'scrooloose/syntastic'
  Plug 'majutsushi/tagbar'
  Plug 'tshirtman/vim-cython'
  Plug 'lervag/vim-latex'
  Plug 'mustache/vim-mustache-handlebars'
  Plug 'kchmck/vim-coffee-script'
+ Plug 'rkennedy/vim-delphi'
  Plug 'Valloric/MatchTagAlways'
  Plug 'digitaltoad/vim-jade'
  Plug 'noahfrederick/vim-skeleton'
@@ -310,11 +317,11 @@ let NERDTreeIgnore=['.vim$', '\~$', '.*\.pyc$', 'pip-log\.txt$', '.lo$','.mod$']
 " dynamically but don't know how
 " {{{ pylint
 " Load pylint code plugin
-let g:pymode_lint = 0
+let g:pymode_lint = 1
 
 " Switch pylint, pyflakes, pep8, mccabe code-checkers
 " Can have multiply values "pep8,pyflakes,mcccabe"
-let g:pymode_lint_checker = "pyflakes,pep8,mccabe"
+let g:pymode_lint_checker = "pylint,pyflakes,pep8,mccabe"
 
 " Skip errors and warnings
 let g:pymode_lint_ignore='E701,E231'
@@ -330,7 +337,7 @@ let g:pymode_lint_onfly = 0
 let g:pymode_lint_write = 0
 
 " Auto open cwindow if errors be finded
-let g:pymode_lint_cwindow = 1
+let g:pymode_lint_cwindow = 0
 
 " Show error message if cursor placed at the error line
 let g:pymode_lint_message = 1
@@ -435,9 +442,10 @@ nnoremap <F7> :TagbarToggle<CR>
 let g:tagbar_type_vb = {
     \ 'ctagstype' : 'VB',
     \ 'kinds'     : [
+        \ 'r:classes',
         \ 's:subroutines',
         \ 'f:functions',
-        \ 'v:variables',
+        \ 'v:variables:1',
         \ 'g:globals',
         \ 't:types',
         \ 'c:constants',
@@ -501,6 +509,7 @@ endif
 " {{{ rst
 " exclude lisp from syntax highlighting in rst files because of issue https://code.google.com/p/vim/issues/detail?id=108&q=rst
 let g:rst_syntax_code_list = ['vim', 'java', 'cpp', 'php', 'python', 'perl']
+" use vim-extline instead
 " }}}
 " {{{ SimpylFold
 " aslo fold away cython funcs
@@ -526,6 +535,29 @@ let g:NERDCustomDelimiters = {
 " {{{ jsx
 let g:jsx_ext_required = 0
 " }}}
+" {{{ Syntastics
+"set statusline+=%#warningmsg#
+"set statusline+=%{SyntasticStatuslineFlag()}
+"set statusline+=%*
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 0
+let g:syntastic_check_on_wq = 0
+" }}}
+" {{{ manuel pylint
+autocmd FileType python setlocal makeprg=c:\miniconda\envs\devel\scripts\pylint\ --reports=n\ --msg-template=\"{path}:{line}:\ {msg_id}\ {symbol},\ {obj}\ {msg}\"\ %
+autocmd FileType python setlocal errorformat=%f:%l:\ %m
+" }}}
+" {{{ Ag
+let g:ag_prg="c:/Users/ortbauma/apps/silver_searcher/ag.exe --vimgrep --smart-case"
+" }}}
 " {{{ Airline
+"let g:airline_theme = 'powerlineish'
 let g:airline_theme='molokai'
+let g:airline#extensions#hunks#enabled=0
+let g:airline#extensions#branch#enabled=1
+" display whole path
+let g:airline_section_c = '%<%F%m %#__accent_red#%{airline#util#wrap(airline#parts#readonly(),0)}%#__restore__#'
+let g:airline#extensions#tabline#enabled = 0
 " }}}
