@@ -17,6 +17,37 @@ symlink which also works under windows::
   cd $XDG_CONFIG_HOME
   git clone --recursive https://github.com/mortbauer/myvim $XDG_CONFIG_HOME/vim
   
+
+Plug Ins
+********
+The plug ins are managed by vim-plug.
+
+Installation
+============
+
+Download plug.vim https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+and put it in the "autoload" directory.
+
+Unix
+----
+
+curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+
+Neovim
+------
+
+curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs \
+    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+
+Windows (PowerShell)
+--------------------
+
+md ~\vimfiles\autoload
+$uri = 'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+(New-Object Net.WebClient).DownloadFile($uri, $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath("~\vimfiles\autoload\plug.vim"))
+
+
 The first time you open vim with the new settings, you need to open a new shell 
 otherwise the VIMINIT you just specified won't be used and then you need to type into vim::
 
