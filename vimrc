@@ -70,8 +70,7 @@ endif
  Plug 'scrooloose/nerdcommenter'
  Plug 'editorconfig/editorconfig-vim'
  Plug 'scrooloose/nerdtree'
- Plug 'klen/python-mode'
- "Plug 'scrooloose/syntastic'
+ Plug 'scrooloose/syntastic'
  Plug 'majutsushi/tagbar'
  Plug 'tshirtman/vim-cython'
  Plug 'lervag/vim-latex'
@@ -85,6 +84,7 @@ endif
  Plug 'peterhoeg/vim-qml'
  Plug 'saltstack/salt-vim'
  Plug 'bling/vim-airline'
+ Plug 'bling/vim-airline-themes'
  " local repos
  "Plug '/data/devel/vim/molokai-transparent/.git', {'sync':'no'}
  "Plug '/data/devel/vim/vim-ipython/.git', {'sync':'no'}
