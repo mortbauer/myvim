@@ -51,6 +51,7 @@ endif
  Plug 'ingo-library'
  " use the aur package since it is patched for the used languagetool version
  "Plug 'LanguageTool'
+ Plug 'tpope/vim-fugitive'
  "Plug 'cjrh/vim-conda'
  Plug 'gabrielelana/vim-markdown'
  Plug 'mxw/vim-jsx'
@@ -70,7 +71,10 @@ endif
  Plug 'scrooloose/nerdcommenter'
  Plug 'editorconfig/editorconfig-vim'
  Plug 'scrooloose/nerdtree'
- Plug 'scrooloose/syntastic'
+ "Plug 'scrooloose/syntastic'
+ "Plug 'klen/python-mode'
+ Plug 'hdima/python-syntax'
+ "Plug 'scrooloose/syntastic'
  Plug 'majutsushi/tagbar'
  Plug 'tshirtman/vim-cython'
  Plug 'lervag/vim-latex'
@@ -83,8 +87,8 @@ endif
  Plug 'jmcantrell/vim-virtualenv'
  Plug 'peterhoeg/vim-qml'
  Plug 'saltstack/salt-vim'
- Plug 'bling/vim-airline'
- Plug 'bling/vim-airline-themes'
+ Plug 'vim-airline/vim-airline'
+ Plug 'vim-airline/vim-airline-themes'
  " local repos
  "Plug '/data/devel/vim/molokai-transparent/.git', {'sync':'no'}
  "Plug '/data/devel/vim/vim-ipython/.git', {'sync':'no'}
@@ -207,7 +211,7 @@ if has('gui_running')
     set stal=0                              " don't show tabline
     set background=dark
     colorscheme molokai
-    set lines=80 columns=80
+    set lines=80 columns=90
 else
     set background=dark
     let g:zenburn_old_Visual = 1
@@ -413,6 +417,8 @@ let g:pymode_motion = 0
 " {{{ virtualenv
 let g:pymode_virtualenv = 0
 " }}}
+" {{{ syntax
+" }}}
 " }}}
 " {{{ vim-sessions
 let g:session_autosave=1
@@ -527,6 +533,9 @@ let g:NERDCustomDelimiters = {
         \ 'cython': { 'left': '# ', 'right': '' }
     \ }
 " }}}
+" {{{ jsx
+let g:jsx_ext_required = 0
+" }}}
 " {{{ Syntastics
 "set statusline+=%#warningmsg#
 "set statusline+=%{SyntasticStatuslineFlag()}
@@ -546,6 +555,7 @@ let g:ag_prg="c:/Users/ortbauma/apps/silver_searcher/ag.exe --vimgrep --smart-ca
 " }}}
 " {{{ Airline
 "let g:airline_theme = 'powerlineish'
+let g:airline_theme='molokai'
 let g:airline#extensions#hunks#enabled=0
 let g:airline#extensions#branch#enabled=1
 " display whole path
