@@ -47,14 +47,11 @@ endif
  "Plug 'Zenburn'
  Plug 'gmarik/ingretu'
  Plug 'endel/vim-github-colorscheme'
-<<<<<<< HEAD
  Plug 'summerfruit256.vim'
  Plug 'ingo-library'
  Plug 'davidhalter/jedi-vim'
-=======
  "Plug 'summerfruit256.vim'
- Plug 'vim-scripts/ingo-library'
->>>>>>> dab5dfac592c374b7f294a16e4ca4f80b6d8537d
+ "Plug 'vim-scripts/ingo-library'
  " use the aur package since it is patched for the used languagetool version
  "Plug 'LanguageTool'
  Plug 'tpope/vim-fugitive'
@@ -79,7 +76,7 @@ endif
  "Plug 'klen/python-mode'
  Plug 'Konfekt/FastFold'
  "Plug 'hdima/python-syntax'
- Plug 'tmhedberg/SimpylFold'
+ "Plug 'tmhedberg/SimpylFold'
  "Plug 'scrooloose/syntastic'
  Plug 'majutsushi/tagbar'
  Plug 'tshirtman/vim-cython'
@@ -555,14 +552,11 @@ autocmd FileType python setlocal makeprg=pylint\ --reports=n\ --msg-template=\"{
 autocmd FileType python setlocal errorformat=%f:%l:\ %m
 " }}}
 " {{{ Ag
-<<<<<<< HEAD
-=======
 if has('gui_running')
     if has('win32') || has('win64')
         let g:ag_prg="c:/Users/ortbauma/apps/silver_searcher/ag.exe --vimgrep --smart-case"
     endif
 endif
->>>>>>> dab5dfac592c374b7f294a16e4ca4f80b6d8537d
 " }}}
 " {{{ Airline
 "let g:airline_theme = 'powerlineish'
