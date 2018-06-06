@@ -49,12 +49,12 @@ endif
  Plug 'endel/vim-github-colorscheme'
  Plug 'summerfruit256.vim'
  Plug 'ingo-library'
+ Plug 'davidhalter/jedi-vim'
  " use the aur package since it is patched for the used languagetool version
  "Plug 'LanguageTool'
  Plug 'tpope/vim-fugitive'
  "Plug 'cjrh/vim-conda'
  Plug 'gabrielelana/vim-markdown'
- Plug 'mxw/vim-jsx'
  Plug 'pangloss/vim-javascript'
  Plug 'veselosky/vim-rst'
  Plug 'drmikehenry/vim-extline'
@@ -85,6 +85,7 @@ endif
  Plug 'noahfrederick/vim-skeleton'
  Plug 'jmcantrell/vim-virtualenv'
  Plug 'peterhoeg/vim-qml'
+ Plug 'udalov/kotlin-vim'
  Plug 'saltstack/salt-vim'
  Plug 'vim-airline/vim-airline'
  Plug 'vim-airline/vim-airline-themes'
@@ -532,9 +533,6 @@ let g:NERDCustomDelimiters = {
         \ 'cython': { 'left': '# ', 'right': '' }
     \ }
 " }}}
-" {{{ jsx
-let g:jsx_ext_required = 0
-" }}}
 " {{{ Syntastics
 "set statusline+=%#warningmsg#
 "set statusline+=%{SyntasticStatuslineFlag()}
@@ -550,7 +548,6 @@ autocmd FileType python setlocal makeprg=c:\miniconda\envs\devel\scripts\pylint\
 autocmd FileType python setlocal errorformat=%f:%l:\ %m
 " }}}
 " {{{ Ag
-let g:ag_prg="c:/Users/ortbauma/apps/silver_searcher/ag.exe --vimgrep --smart-case"
 " }}}
 " {{{ Airline
 "let g:airline_theme = 'powerlineish'
@@ -561,3 +558,4 @@ let g:airline#extensions#branch#enabled=1
 let g:airline_section_c = '%<%F%m %#__accent_red#%{airline#util#wrap(airline#parts#readonly(),0)}%#__restore__#'
 let g:airline#extensions#tabline#enabled = 0
 " }}}
+let g:jedi#auto_initialization = 1
