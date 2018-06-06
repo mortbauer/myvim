@@ -43,13 +43,18 @@ endif
  call plug#begin('$HOME/.config/vim/plugged')
  " My Bundles here:
  " colorschemes
- Plug 'molokai'
- Plug 'Zenburn'
+ Plug 'tomasr/molokai'
+ "Plug 'Zenburn'
  Plug 'gmarik/ingretu'
  Plug 'endel/vim-github-colorscheme'
+<<<<<<< HEAD
  Plug 'summerfruit256.vim'
  Plug 'ingo-library'
  Plug 'davidhalter/jedi-vim'
+=======
+ "Plug 'summerfruit256.vim'
+ Plug 'vim-scripts/ingo-library'
+>>>>>>> dab5dfac592c374b7f294a16e4ca4f80b6d8537d
  " use the aur package since it is patched for the used languagetool version
  "Plug 'LanguageTool'
  Plug 'tpope/vim-fugitive'
@@ -58,9 +63,8 @@ endif
  Plug 'pangloss/vim-javascript'
  Plug 'veselosky/vim-rst'
  Plug 'drmikehenry/vim-extline'
- Plug 'SpellCheck'
+ Plug 'vim-scripts/SpellCheck'
  Plug 'tpope/vim-fugitive'
- Plug 'tmhedberg/SimpylFold'
  Plug 'rking/ag.vim'
  Plug 'effi/vim-OpenFoam-syntax'
  Plug 'dimasg/vim-mark'
@@ -71,8 +75,11 @@ endif
  Plug 'scrooloose/nerdcommenter'
  Plug 'editorconfig/editorconfig-vim'
  Plug 'scrooloose/nerdtree'
+ "Plug 'scrooloose/syntastic'
  "Plug 'klen/python-mode'
- Plug 'hdima/python-syntax'
+ Plug 'Konfekt/FastFold'
+ "Plug 'hdima/python-syntax'
+ Plug 'tmhedberg/SimpylFold'
  "Plug 'scrooloose/syntastic'
  Plug 'majutsushi/tagbar'
  Plug 'tshirtman/vim-cython'
@@ -544,10 +551,18 @@ let g:syntastic_check_on_open = 0
 let g:syntastic_check_on_wq = 0
 " }}}
 " {{{ manuel pylint
-autocmd FileType python setlocal makeprg=c:\miniconda\envs\devel\scripts\pylint\ --reports=n\ --msg-template=\"{path}:{line}:\ {msg_id}\ {symbol},\ {obj}\ {msg}\"\ %
+autocmd FileType python setlocal makeprg=pylint\ --reports=n\ --msg-template=\"{path}:{line}:\ {msg_id}\ {symbol},\ {obj}\ {msg}\"\ %
 autocmd FileType python setlocal errorformat=%f:%l:\ %m
 " }}}
 " {{{ Ag
+<<<<<<< HEAD
+=======
+if has('gui_running')
+    if has('win32') || has('win64')
+        let g:ag_prg="c:/Users/ortbauma/apps/silver_searcher/ag.exe --vimgrep --smart-case"
+    endif
+endif
+>>>>>>> dab5dfac592c374b7f294a16e4ca4f80b6d8537d
 " }}}
 " {{{ Airline
 "let g:airline_theme = 'powerlineish'
@@ -558,4 +573,18 @@ let g:airline#extensions#branch#enabled=1
 let g:airline_section_c = '%<%F%m %#__accent_red#%{airline#util#wrap(airline#parts#readonly(),0)}%#__restore__#'
 let g:airline#extensions#tabline#enabled = 0
 " }}}
+" {{{ Jedi
 let g:jedi#auto_initialization = 1
+" }}}
+" {{{ FastFold
+nmap zuz <Plug>(FastFoldUpdate)
+let g:fastfold_savehook = 1
+let g:fastfold_fold_command_suffixes =  ['x','X','a','A','o','O','c','C']
+let g:fastfold_fold_movement_commands = [']z', '[z', 'zj', 'zk']
+" }}}
+" {{{ Gundo
+if has('python3')
+    " see: https://bitbucket.org/sjl/gundo.vim/issues/42/about-python3-support
+    let g:gundo_prefer_python3 = 1          " anything else breaks on Ubuntu 16.04+
+endif
+" }}}
