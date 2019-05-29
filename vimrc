@@ -44,6 +44,7 @@ endif
  " My Bundles here:
  " colorschemes
  Plug 'tomasr/molokai'
+ Plug 'mbbill/undotree'
  "Plug 'Zenburn'
  Plug 'gmarik/ingretu'
  Plug 'endel/vim-github-colorscheme'
@@ -61,6 +62,7 @@ endif
  Plug 'drmikehenry/vim-extline'
  Plug 'vim-scripts/SpellCheck'
  Plug 'tpope/vim-fugitive'
+ Plug 'dag/vim-fish'
  Plug 'rking/ag.vim'
  Plug 'effi/vim-OpenFoam-syntax'
  Plug 'dimasg/vim-mark'
@@ -71,6 +73,7 @@ endif
  Plug 'scrooloose/nerdcommenter'
  Plug 'editorconfig/editorconfig-vim'
  Plug 'scrooloose/nerdtree'
+ Plug 'stevearc/vim-arduino'
  "Plug 'scrooloose/syntastic'
  "Plug 'klen/python-mode'
  Plug 'Konfekt/FastFold'
@@ -579,4 +582,16 @@ if has('python3')
     " see: https://bitbucket.org/sjl/gundo.vim/issues/42/about-python3-support
     let g:gundo_prefer_python3 = 1          " anything else breaks on Ubuntu 16.04+
 endif
+" }}}
+" {{{ Jedi
+let g:jedi#auto_initialization = 0
+" }}}
+" {{{ Arduino
+" my_file.ino [arduino:avr:uno]
+let g:arduino_cmd = '/home/ortbauma/arduino-1.8.5/arduino'
+
+function! MyStatusLine()
+  return '%f [' . g:arduino_board . ']'
+endfunction
+setl statusline+=%!MyStatusLine()
 " }}}
