@@ -36,7 +36,7 @@ if !exists("g:setted_environment") || &cp
     let g:setted_environment = 1
 endif
 " }}} Environment
-" {{{ Vundle
+" {{{ plugins via vim-plug use PlugUpdate, PlugInstall,...
 " Forget about vi and set it first as it modifies future behaviour
  set nocompatible               " be iMproved
  filetype off                   " required!
@@ -53,6 +53,7 @@ endif
  " use the aur package since it is patched for the used languagetool version
  "Plug 'LanguageTool'
  Plug 'tpope/vim-fugitive'
+ Plug 'davidhalter/jedi-vim'
  "Plug 'cjrh/vim-conda'
  Plug 'gabrielelana/vim-markdown'
  Plug 'pangloss/vim-javascript'
