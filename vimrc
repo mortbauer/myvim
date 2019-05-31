@@ -47,8 +47,6 @@ endif
  "Plug 'Zenburn'
  Plug 'gmarik/ingretu'
  Plug 'endel/vim-github-colorscheme'
- Plug 'summerfruit256.vim'
- Plug 'ingo-library'
  Plug 'davidhalter/jedi-vim'
  "Plug 'summerfruit256.vim'
  "Plug 'vim-scripts/ingo-library'
@@ -72,6 +70,13 @@ endif
  Plug 'scrooloose/nerdcommenter'
  Plug 'editorconfig/editorconfig-vim'
  Plug 'scrooloose/nerdtree'
+if has('nvim')
+  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+else
+  Plug 'Shougo/deoplete.nvim'
+  Plug 'roxma/nvim-yarp'
+  Plug 'roxma/vim-hug-neovim-rpc'
+endif
  "Plug 'scrooloose/syntastic'
  "Plug 'klen/python-mode'
  Plug 'Konfekt/FastFold'
@@ -113,6 +118,7 @@ endif
       "au BufEnter * if(exists('b:winview')) | call winrestview(b:winview) | endif
     "endif
 " vim syntax highlighting is slow for long lines, better disable then be slow
+let g:deoplete#enable_at_startup = 1
 set synmaxcol=150
 " Enable filetype plugins
 filetype on
@@ -141,13 +147,13 @@ if $STY != "" && !has('gui')
   set t_fs=\
 endif
 
-" use folding if we can
-"if has ('folding')
-  "set foldenable
-  "set foldmethod=marker
-  "set foldmarker={{{,}}}
-  "set foldcolumn=0
-"endif
+ "use folding if we can
+if has ('folding')
+  set foldenable
+  set foldmethod=indent
+  set foldmarker={{{,}}}
+  set foldcolumn=0
+endif
 
 " utf-8
 if has('multi_byte')
@@ -406,6 +412,7 @@ let g:pymode_rope_always_show_complete_menu = 0
 " {{{ folding
 " Enable python folding
 let g:pymode_folding=1
+let g:python_folding=1
 " }}}
 " {{{ run
 " Load run code plugin
@@ -496,6 +503,8 @@ let g:skeleton_template_dir=g:xdg_config_home . '/vim/skeletons'
 " }}}
 " Autocommands {{{
 if has('autocmd')
+    "change local buffer dir to current file
+    autocmd BufEnter * silent! lcd %:p:h
 endif
 " }}} 
 " {{{ Completion
