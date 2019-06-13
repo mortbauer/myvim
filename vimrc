@@ -115,6 +115,7 @@ endif
     "endif
 " vim syntax highlighting is slow for long lines, better disable then be slow
 set synmaxcol=150
+set viminfo='200
 " Enable filetype plugins
 filetype on
 filetype plugin on
