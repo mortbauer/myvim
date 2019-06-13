@@ -48,15 +48,15 @@ endif
  "Plug 'Zenburn'
  Plug 'gmarik/ingretu'
  Plug 'endel/vim-github-colorscheme'
+ Plug 'davidhalter/jedi-vim'
  "Plug 'summerfruit256.vim'
- Plug 'vim-scripts/ingo-library'
+ "Plug 'vim-scripts/ingo-library'
  " use the aur package since it is patched for the used languagetool version
  "Plug 'LanguageTool'
  Plug 'tpope/vim-fugitive'
  Plug 'davidhalter/jedi-vim'
  "Plug 'cjrh/vim-conda'
  Plug 'gabrielelana/vim-markdown'
- Plug 'mxw/vim-jsx'
  Plug 'pangloss/vim-javascript'
  Plug 'veselosky/vim-rst'
  Plug 'drmikehenry/vim-extline'
@@ -74,11 +74,18 @@ endif
  Plug 'editorconfig/editorconfig-vim'
  Plug 'scrooloose/nerdtree'
  Plug 'stevearc/vim-arduino'
+if has('nvim')
+  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+else
+  Plug 'Shougo/deoplete.nvim'
+  Plug 'roxma/nvim-yarp'
+  Plug 'roxma/vim-hug-neovim-rpc'
+endif
  "Plug 'scrooloose/syntastic'
  "Plug 'klen/python-mode'
  Plug 'Konfekt/FastFold'
  "Plug 'hdima/python-syntax'
- Plug 'tmhedberg/SimpylFold'
+ "Plug 'tmhedberg/SimpylFold'
  "Plug 'scrooloose/syntastic'
  Plug 'majutsushi/tagbar'
  Plug 'tshirtman/vim-cython'
@@ -91,6 +98,7 @@ endif
  Plug 'noahfrederick/vim-skeleton'
  Plug 'jmcantrell/vim-virtualenv'
  Plug 'peterhoeg/vim-qml'
+ Plug 'udalov/kotlin-vim'
  Plug 'saltstack/salt-vim'
  Plug 'vim-airline/vim-airline'
  Plug 'vim-airline/vim-airline-themes'
@@ -114,6 +122,7 @@ endif
       "au BufEnter * if(exists('b:winview')) | call winrestview(b:winview) | endif
     "endif
 " vim syntax highlighting is slow for long lines, better disable then be slow
+let g:deoplete#enable_at_startup = 1
 set synmaxcol=150
 set viminfo='200
 " Enable filetype plugins
@@ -143,13 +152,13 @@ if $STY != "" && !has('gui')
   set t_fs=\
 endif
 
-" use folding if we can
-"if has ('folding')
-  "set foldenable
-  "set foldmethod=marker
-  "set foldmarker={{{,}}}
-  "set foldcolumn=0
-"endif
+ "use folding if we can
+if has ('folding')
+  set foldenable
+  set foldmethod=indent
+  set foldmarker={{{,}}}
+  set foldcolumn=0
+endif
 
 " utf-8
 if has('multi_byte')
@@ -408,6 +417,7 @@ let g:pymode_rope_always_show_complete_menu = 0
 " {{{ folding
 " Enable python folding
 let g:pymode_folding=1
+let g:python_folding=1
 " }}}
 " {{{ run
 " Load run code plugin
@@ -498,6 +508,8 @@ let g:skeleton_template_dir=g:xdg_config_home . '/vim/skeletons'
 " }}}
 " Autocommands {{{
 if has('autocmd')
+    "change local buffer dir to current file
+    autocmd BufEnter * silent! lcd %:p:h
 endif
 " }}} 
 " {{{ Completion
@@ -539,9 +551,6 @@ let g:NERDCustomDelimiters = {
         \ 'cython': { 'left': '# ', 'right': '' }
     \ }
 " }}}
-" {{{ jsx
-let g:jsx_ext_required = 0
-" }}}
 " {{{ Syntastics
 "set statusline+=%#warningmsg#
 "set statusline+=%{SyntasticStatuslineFlag()}
@@ -571,6 +580,9 @@ let g:airline#extensions#branch#enabled=1
 " display whole path
 let g:airline_section_c = '%<%F%m %#__accent_red#%{airline#util#wrap(airline#parts#readonly(),0)}%#__restore__#'
 let g:airline#extensions#tabline#enabled = 0
+" }}}
+" {{{ Jedi
+let g:jedi#auto_initialization = 1
 " }}}
 " {{{ FastFold
 nmap zuz <Plug>(FastFoldUpdate)
