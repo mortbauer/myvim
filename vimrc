@@ -44,6 +44,7 @@ endif
  " My Bundles here:
  " colorschemes
  Plug 'tomasr/molokai'
+ Plug 'neoclide/coc.nvim', {'branch': 'release'}
  "Plug 'Zenburn'
  Plug 'gmarik/ingretu'
  Plug 'endel/vim-github-colorscheme'
