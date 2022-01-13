@@ -48,13 +48,12 @@ endif
  "Plug 'Zenburn'
  Plug 'gmarik/ingretu'
  Plug 'endel/vim-github-colorscheme'
- Plug 'davidhalter/jedi-vim'
  "Plug 'summerfruit256.vim'
  "Plug 'vim-scripts/ingo-library'
  " use the aur package since it is patched for the used languagetool version
  "Plug 'LanguageTool'
  Plug 'tpope/vim-fugitive'
- Plug 'davidhalter/jedi-vim'
+ Plug 'davidhalter/jedi'
  "Plug 'cjrh/vim-conda'
  Plug 'gabrielelana/vim-markdown'
  Plug 'pangloss/vim-javascript'
@@ -81,6 +80,7 @@ else
   Plug 'roxma/nvim-yarp'
   Plug 'roxma/vim-hug-neovim-rpc'
 endif
+ Plug 'deoplete-plugins/deoplete-jedi'
  "Plug 'scrooloose/syntastic'
  "Plug 'klen/python-mode'
  Plug 'Konfekt/FastFold'
@@ -122,7 +122,6 @@ endif
       "au BufEnter * if(exists('b:winview')) | call winrestview(b:winview) | endif
     "endif
 " vim syntax highlighting is slow for long lines, better disable then be slow
-let g:deoplete#enable_at_startup = 1
 set synmaxcol=150
 set viminfo='200
 " Enable filetype plugins
@@ -607,4 +606,9 @@ function! MyStatusLine()
   return '%f [' . g:arduino_board . ']'
 endfunction
 setl statusline+=%!MyStatusLine()
+" }}}
+" {{{ deoplete
+let g:deoplete#enable_at_startup = 1
+let g:deoplete#sources#jedi#show_docstring = 1
+let g:deoplete#sources#jedi#enable_typeinfo = 1 " might slow down
 " }}}
